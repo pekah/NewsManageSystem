@@ -181,7 +181,34 @@ public class Spider {
 			
 			
 			if(isFindTitle){
-				System.out.println(titleMa.group(1).trim());
+//				System.out.println(titleMa.group(1).trim());
+//				
+//				System.out.println(authorMa.group(1).trim());
+//				if(isFindEditor){
+//					System.out.println(editorMa.group(1).trim());
+//				}else{
+//					
+//				}
+//				
+//				System.out.println(timeMa.group(1).trim());
+//				System.out.println(contentMa.group(1).trim());
+				
+				
+				news.setNtitle(titleMa.group(1).trim());
+				news.setNauthor(authorMa.group(1).trim());
+				if(isFindEditor){
+					news.setNeditor(editorMa.group(1).trim());
+				}else{
+					news.setNeditor("空");
+				//时间还没加
+				//时间还没加
+				//时间还没加
+				//时间还没加
+				//时间还没加
+				//时间还没加
+				news.setNcontent(contentMa.group(1).trim());
+				
+				
 			}
 		}
 		return newsList;
