@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class News {
 	private int nid;
+	private String url;
 	private String ntitle;
 	private String ncontent;
 	private Date ntime;
@@ -12,6 +13,12 @@ public class News {
 	
 	public News() {
 		super();
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	public String getNtitle() {
 		return ntitle;
