@@ -14,8 +14,16 @@ public class YangChenMain {
 //		for(News news : newsList){
 //			System.out.println(news.getUrl());
 //		}
-		Spider.GetNewsContent(newsList, "");
+		ArrayList<News> newsList2 = Spider.GetYCWBNewsContent(newsList);
 		
+		for(News news : newsList){
+			System.out.println(news.getUrl());
+			System.out.println(news.getNauthor());
+			System.out.println(news.getNeditor());
+			System.out.println(news.getNcontent());
+			System.out.println(news.getNtitle());
+			System.out.println(news.getNtime());
+		}		
 		
 		
 	}

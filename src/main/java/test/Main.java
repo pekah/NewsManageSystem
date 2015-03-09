@@ -24,7 +24,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		String url = "http://www.zhihu.com/explore/recommendations";
-		String content = Spider.sendGet(url);
+		String content = Spider.sendGet(url,"UTF-8");
 		
 		ArrayList<Zhihu> myZhihu = Spider.GetRecommendations(content);
 
