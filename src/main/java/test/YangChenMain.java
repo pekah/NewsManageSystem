@@ -7,7 +7,7 @@ import com.zyl.bean.News;
 public class YangChenMain {
 	public static void main(String[] args) throws Exception {
 		String url = "http://news.ycwb.com/n_bd_gz.htm";
-		String content = Spider.sendGet(url);		
+		String content = Spider.sendGet(url, "UTF-8");		
 		
 		ArrayList<News> newsList = Spider.GetYCWBNewsLink(content);
 		

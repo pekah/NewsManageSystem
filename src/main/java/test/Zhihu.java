@@ -23,7 +23,7 @@ public class Zhihu {
 		if(getRealUrl(url)){
 			System.out.println("正在抓取" + zhihuUrl);
 			//根据url获取该回答的细节
-			String content = Spider.sendGet(zhihuUrl);
+			String content = Spider.sendGet(zhihuUrl,"UTF-8");
 			Pattern pattern;
 			Matcher matcher;
 			//匹配标题
