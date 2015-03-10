@@ -1,6 +1,6 @@
 package com.zyl.bean;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class News {
 	private int nid;

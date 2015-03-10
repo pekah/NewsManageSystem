@@ -185,21 +185,37 @@ public class Spider {
 			
 			if(isFindTitle){
 				//System.out.println(titleMa.group(1) + "  " + titleMa.group(2));
-				news.setNauthor("果壳网");
-				news.setNtitle(titleMa.group(1).trim() + "  " + titleMa.group(2));
+				news.setNauthor("果壳网");//作者统一用果壳网
+				news.setNtitle(titleMa.group(1).trim() + "  " + titleMa.group(2).trim());
 				if(isFindEditor){
 					news.setNeditor(editorMa.group(1).trim());
 					//System.out.println(editorMa.group(1).trim());
 				}else{
 					news.setNeditor("果壳网");
 				}
+				
+				//System.out.println(timeMa.group(1));
+				//当时间是xx小时前，计算出真实时间，否则，按原时间保存
+				String time = timeMa.group(1).trim();
+				
+				if(time.endsWith("前")){
+					//获得小时数
+					String hour = time.replace("小时前", "");
+					//使用当前时间减去小时数获得真实发布时间
+					
+					
+				}else{
+					
+				}
+				
+				
 //				//时间还没加
 //				//时间还没加
 //				//时间还没加
 //				//时间还没加
 //				//时间还没加
 //				//时间还没加
-				System.out.println(timeMa.group(1));
+				
 //				news.setNcontent(contentMa.group(1).trim());
 				
 				//概述+正文
@@ -327,15 +343,14 @@ public class Spider {
 					news.setNeditor(editorMa.group(1).trim());
 				}else{
 					news.setNeditor("国际新闻");
-				//时间还没加
-				//时间还没加
-				//时间还没加
-				//时间还没加
-				//时间还没加
-				//时间还没加
+				}
+				
+			    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			    java.util.Date time = format.parse(timeMa.group(1));
+			    news.setNtime(time);
+			    
 				news.setNcontent(contentMa.group(1).trim());
 				
-				}
 			}
 		}
 		return newsList;
@@ -385,19 +400,9 @@ public class Spider {
 			boolean isFindContent = contentMa.find();
 			
 			if(isFindTitle){
-//				System.out.println(titleMa.group(1));
-//				System.out.println(authorMa.group(1));
-//				System.out.println(editorMa.group(1));
-//				System.out.println(contentMa.group(1));
-				
-//				System.out.println(timeMa.group(1));
-				
-				//timeMa.group(1)
-				//时间有问题，不能转换时分秒
 			    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			    java.util.Date parsed = format.parse("2014-11-01 21:55:00");
-			    java.sql.Date sql = new java.sql.Date(parsed.getTime());
-			    news.setNtime(sql);
+			    java.util.Date time = format.parse(timeMa.group(1));
+			    news.setNtime(time);
 			    
 				news.setNtitle(titleMa.group(1).trim());
 				if(isFindAuthor){

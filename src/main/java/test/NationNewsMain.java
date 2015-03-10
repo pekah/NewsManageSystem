@@ -11,7 +11,17 @@ public class NationNewsMain {
 		
 		ArrayList<News> newsList = Spider.GetNationalNewsLink(content);
 		
-		Spider.GetNationalNewsContent(newsList);
+		ArrayList<News> newsList2 = Spider.GetNationalNewsContent(newsList);
+		
+		for(News news : newsList2){
+			System.out.println(news.getUrl());
+			System.out.println(news.getNauthor());
+			System.out.println(news.getNeditor());
+			System.out.println(news.getNcontent());
+			System.out.println(news.getNtitle());
+			System.out.println(news.getNtime());
+		}		
+		
 		
 	}
 }
