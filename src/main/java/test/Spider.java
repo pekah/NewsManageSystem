@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -19,7 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
-import org.omg.CosNaming.IstringHelper;
+import org.joda.time.DateTime;
 
 import com.zyl.bean.News;
 
@@ -202,6 +201,10 @@ public class Spider {
 					//获得小时数
 					String hour = time.replace("小时前", "");
 					//使用当前时间减去小时数获得真实发布时间
+					DateTime dt = new DateTime();
+					dt = dt.hourOfDay().setCopy(dt.getHourOfDay() - Integer.parseInt(hour));
+					java.util.Date date = dt.toDate();
+					
 					
 					
 				}else{
