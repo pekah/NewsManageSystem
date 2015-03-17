@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -149,7 +150,7 @@ public class Spider {
 	}
 	
 	//获取流言百科的内容
-	static ArrayList<News> GetRumourContent(ArrayList<News> newsList){
+	static ArrayList<News> GetRumourContent(ArrayList<News> newsList) throws ParseException{
 		for(News news : newsList){
 			
 			String newsUrl = news.getUrl();
@@ -197,33 +198,60 @@ public class Spider {
 				//当时间是xx小时前，计算出真实时间，否则，按原时间保存
 				String time = timeMa.group(1).trim();
 				
-				if(time.endsWith("前")){
+				System.out.println(time);
+				
+				if(time.endsWith("小时前")){
 					//获得小时数
 					String hour = time.replace("小时前", "");
 					//使用当前时间减去小时数获得真实发布时间
 					DateTime dt = new DateTime();
 					dt = dt.hourOfDay().setCopy(dt.getHourOfDay() - Integer.parseInt(hour));
 					java.util.Date date = dt.toDate();
+					news.setNtime(date);
 					
-					
-					
+				}else if(time.endsWith("分钟前")){
+					//获得分钟数
+					String minute = time.replace("分钟前", "");
+					//使用当前时间减去分钟数获得真实发布时间
+					DateTime dt = new DateTime();
+					dt = dt.minuteOfDay().setCopy(dt.getMinuteOfDay() - Integer.parseInt(minute));
+					java.util.Date date = dt.toDate();
+					news.setNtime(date);					
+				}else if(time.startsWith("今天")){
+					//获得小时数
+					String hour = time.replace("今天", "");
+					String[] hourminute = hour.split(":");
+					//设置当天的小时数
+					DateTime dt = new DateTime();
+					dt = dt.hourOfDay().setCopy(hourminute[0]);
+					dt = dt.minuteOfHour().setCopy(hourminute[1]);
+					java.util.Date date = dt.toDate();
+					news.setNtime(date);					
+				}else if(time.startsWith("昨天")){
+					//获得小时数
+					String hour = time.replace("昨天", "");
+					String[] hourminute = hour.split(":");
+					//设置小时数并减去一天
+					DateTime dt = new DateTime();
+					dt = dt.hourOfDay().setCopy(hourminute[0]);
+					dt = dt.minuteOfHour().setCopy(hourminute[1]);
+					dt = dt.dayOfYear().setCopy(dt.getDayOfYear() - 1);
+					java.util.Date date = dt.toDate();
+					news.setNtime(date);					
 				}else{
-					
+				    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				    java.util.Date formatTime = format.parse(time);
+					news.setNtime(formatTime);
 				}
 				
-				
-//				//时间还没加
-//				//时间还没加
-//				//时间还没加
-//				//时间还没加
-//				//时间还没加
-//				//时间还没加
-				
-//				news.setNcontent(contentMa.group(1).trim());
-				
 				//概述+正文
-				System.out.println(descMa.group(1) + "  " + descMa.group(2) + "   <p/>真相     " + descMa.group(3) + "<p/>" + contentMa.group(1));
+				String content2 = descMa.group(1) + "  " + descMa.group(2) + "   <p/>真相     " + descMa.group(3) + "<p/>" + contentMa.group(1);
 				
+				news.setNcontent(content2);		
+				
+				
+				System.out.println(news.getNtime());
+				System.out.println(news.getNcontent());
 				//正文
 //				System.out.println(contentMa.group(1));
 			}
