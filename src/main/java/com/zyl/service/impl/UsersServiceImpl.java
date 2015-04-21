@@ -1,5 +1,6 @@
 package com.zyl.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.zyl.bean.News;
+import com.zyl.controller.Page;
 import com.zyl.dao.CategoryDao;
 import com.zyl.dao.NewsDao;
 import com.zyl.dao.ReviewDao;
@@ -49,8 +52,24 @@ public class UsersServiceImpl implements UsersService {
 		// TODO Auto-generated method stub
 		
 	}
-	public Map getNewsTitlesByCateName(String cateName) {
-		return newsDao.getNewsTitlesByCateName(cateName);
+	/**
+	 * ================================== 分页获取操作
+	 */
+	
+	public Page<News> getNewsTitlesByCateId(String cname, Integer pageNumber, Integer pageSize) {
+		int skip = pageSize * (pageNumber - 1);
+		
+		List<News> newsList = newsDao.getNewsTitlesByCateName(cname, skip, pageSize);
+		long count = newsDao.getNewsCountByCateName(cname);
+		
+		Page<News> newsPage = new Page<News>();
+		newsPage.setPageNumber(pageNumber);
+		newsPage.setPageSize(pageSize);
+		newsPage.setTotalPage(count % pageSize == 0 ? (count / pageSize) : (count / pageSize + 1)); 
+		newsPage.setTotalRow(count);
+		newsPage.setPageList(newsList);
+		
+		return newsPage;
 	}
 	
 	public Map getNewsByNID(ObjectId nid) {
@@ -65,4 +84,6 @@ public class UsersServiceImpl implements UsersService {
 	public Map searchNews(String keyword) {
 		return 	newsDao.searchNews(keyword);
 	}
+
+	
 }

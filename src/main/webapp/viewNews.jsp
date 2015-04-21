@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="GBK"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 String path = request.getContextPath();
@@ -8,9 +8,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-  	<meta http-equiv="Content-Type" content="text/html; charset=GBK">
     <base href="<%=basePath%>">
-    <title>ĞÂÎÅÒ³</title>
+    <title>æ–°é—»é¡µ</title>
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
 	<link href="css/umeditor.css" type="text/css" rel="stylesheet">
 	<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
@@ -30,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    font-size: 12px;		
 		}
 		h1{
-            font-family: "Î¢ÈíÑÅºÚ";
+            font-family: "å¾®è½¯é›…é»‘";
             font-weight: normal;
         }
         .btn {
@@ -128,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
 	</style>
 	<script type="text/javascript">
-		$(document).ready(function()
+		/* $(document).ready(function()
 		{
 				$.ajax({
 				    url : "getCategorys.do",
@@ -151,44 +150,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				       
 				    }
 				});				
-		});
+		}); */
 		
 	</script>
   </head>
   
   <body>
-	<!--µ¼º½Ìõ¿ªÊ¼-->
+	<!--å¯¼èˆªæ¡å¼€å§‹-->
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" id="navigation">
 	  <div class="navbar-header" id="bs-example-navbar-collapse-1">
 		<ul class="nav navbar-nav" id="navbarul">
-		  <li><a href="javascript:void(0)">»¶Ó­£º<%=session.getAttribute("name") %></a></li>		
-		  <li class="active"><a href="#">Ê×Ò³</a></li>
+		  <li><a href="javascript:void(0)">æ¬¢è¿ï¼š<%=session.getAttribute("name") %></a></li>		
+		  <li class="active"><a href="#">é¦–é¡µ</a></li>
+	 	
+	 	  <c:forEach var="cate" items="${category }">
+	 	  		<li><a href="specifyNewsList.do?cname=${cate.cname}">${cate.cname }</a></li>
+	 	  </c:forEach>		  
+		  
 		</ul>
 		<form class="navbar-form navbar-left" role="search">
 		  <div class="form-group">
 			<input type="text" class="form-control">
-			<button type="submit" class="btn btn-default" disabled="disabled">ËÑË÷</button>
+			<button type="submit" class="btn btn-default" disabled="disabled">æœç´¢</button>
 		  </div>
 		</form>
 	  </div>
 	 </nav>
-	 <!--µ¼º½Ìõ½áÊø-->
-	 <!--±êÌâÀ¸¿ªÊ¼-->
+	 <!--å¯¼èˆªæ¡ç»“æŸ-->
+	 <!--æ ‡é¢˜æ å¼€å§‹-->
 	 <div id="allNewsList" class="allNewsList">
 	 		<h3 id="cateNameh3"></h3>
 			<ul id="catesul"></ul>
 	 </div>
-	<!--±êÌâÀ¸½áÊø-->
-	<!-- ĞÂÎÅÀ¸¿ªÊ¼ -->
+	<!--æ ‡é¢˜æ ç»“æŸ-->
+	<!-- æ–°é—»æ å¼€å§‹ -->
 	<div id="viewNews">
 		<h1>${data.news[0]}</h1>
-		<span class="label label-success">×÷Õß£º</span>
+		<span class="label label-success">ä½œè€…ï¼š</span>
 		<span class="label">${data.news[2]}</span>
-		<span class="label label-success">±à¼­£º</span>
+		<span class="label label-success">ç¼–è¾‘ï¼š</span>
 		<span class="label">${data.news[3]}</span>
-		<span class="label label-success">·¢²¼Ê±¼ä£º</span>
+		<span class="label label-success">å‘å¸ƒæ—¶é—´ï¼š</span>
 		<span class="label">${data.news[4]}</span>
-		<span class="label label-success">ÆÀÂÛÊı£º</span>
+		<span class="label label-success">è¯„è®ºæ•°ï¼š</span>
 		<span class="label">${data.news[5]}</span>
 		<br/>
 		<br/>
@@ -196,15 +200,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			${data.news[1]}
 		</p>
 		<form action="addReview.do" method="post">
-			<textarea class="form-control" name="content" style="width: 1179px; height: 134px;" rows="3" placeholder="ÇëÊäÈëÄúµÄÆÀÂÛ"></textarea>
+			<textarea class="form-control" name="content" style="width: 1179px; height: 134px;" rows="3" placeholder="è¯·è¾“å…¥æ‚¨çš„è¯„è®º"></textarea>
 			<input type="hidden" name="nid" value="<%=request.getAttribute("nid") %>"/>
-			<button type="submit" class="btn btn-default">·¢±íÆÀÂÛ</button>
+			<button type="submit" class="btn btn-default">å‘è¡¨è¯„è®º</button>
 		</form>		
 		  <c:forEach items="${data.reviewsList}" var="reviews">
-		  	<p>${reviews[1]},·¢±íÓÚ${reviews[2]}</p>
+		  	<p>${reviews[1]},å‘è¡¨äº${reviews[2]}</p>
 		  	<p>${reviews[0]}</p>
 		  </c:forEach>
 	</div>
-	<!-- ĞÂÎÅÀ¸½áÊø -->
+	<!-- æ–°é—»æ ç»“æŸ -->
   </body>
 </html>

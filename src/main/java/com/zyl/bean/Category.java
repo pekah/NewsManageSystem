@@ -1,17 +1,16 @@
 package com.zyl.bean;
 
+import org.bson.types.ObjectId;
+
 public class Category {
-	private int cid;
+	private ObjectId cid;
 	private String cname;
-	private News news;
 	
-	public Category(String cname, News news) {
-		super();
-		this.cname = cname;
-		this.news = news;
+	public ObjectId getCid() {
+		return cid;
 	}
-	public Category() {
-		super();
+	public void setCid(ObjectId cid) {
+		this.cid = cid;
 	}
 	public String getCname() {
 		return cname;
@@ -19,15 +18,7 @@ public class Category {
 	public void setCname(String cname) {
 		this.cname = cname;
 	}
-	public News getNews() {
-		return news;
-	}
-	public void setNews(News news) {
-		this.news = news;
-	}
-	public int getCid() {
-		return cid;
-	}
+	
 	
 	
 }

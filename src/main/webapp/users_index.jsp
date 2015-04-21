@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -25,7 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
-				$.ajax({
+/* 				$.ajax({
 				    url : "getCategorys.do",
 				    type : "POST",
 				    contentType : "application/json",
@@ -45,7 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    error : function(data) {
 				       
 				    }
-				});			
+				});		 */	
 				
 				//点击搜索按钮	
 				$("#searchBtn").click(function(){
@@ -109,6 +110,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 		}
 		
+		function formSubmit(pageNumber,flag){
+			var form=$("#searchForm");
+			if(flag=='true'){
+				//resetForm();
+			}
+			$("input[type='hidden'][name='pageNumber']").val(pageNumber);
+			$(form).submit();
+		}
+		
+		
 	</script>
   </head>
   
@@ -119,8 +130,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<ul class="nav navbar-nav" id="navbarul">
 		  <li><a href="javascript:void(0)">欢迎你：<%=session.getAttribute("name") %></a></li>		
 	 	  <li class="active"><a href="javascript:void(0);">首页</a></li>
+	 	  <c:forEach var="cate" items="${category }">
+	 	  		<li><a href="specifyNewsList.do?cname=${cate.cname}">${cate.cname }</a></li>
+	 	  </c:forEach>
 		</ul>
-		<form class="navbar-form navbar-left" role="search">
+		<form class="navbar-form navbar-left" role="search" id="searchForm">
+		  <input type="hidden" name="pageNumber" value="${newsPage.pageNumber}" />
+		  <input type="hidden" name="cname" value="${currentCName}" />
 		  <div class="form-group">
 			<input type="text" class="form-control" id="keyword"/>
 			<button type="button" class="btn btn-default" id="searchBtn">搜索</button>
@@ -131,9 +147,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 <!--导航条结束-->
 	 <!--标题栏开始-->
 	 <div id="allNewsList" class="allNewsList">
-	 		<h3 id="cateNameh3"></h3>	
+	 		<h3 id="cateNameh3">${currentCName }</h3>	
+	 		<c:forEach var="news" items="${newsPage.pageList }">
+	 			<li><a target='_blank' href='viewNews.do?nid=${news.nid }'>${news.ntitle}</a><span>${news.ntime }</span>
+	 		</c:forEach>
 			<ul id="catesul"></ul>
 	 </div>
 	<!--标题栏结束-->
-  </body>
+ 	<!-- 分页div -->
+	<div class="col-xs-6">
+		<div class="dataTables_info" id="example2_info">总共
+			${newsPage.totalRow} 记录</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_bootstrap">
+			<ul class="pagination">
+				<c:if test="${newsPage.totalPage>0 }">
+					<li class="prev" onclick="formSubmit('1','false')"><a>首页</a></li>
+					<li
+						class="prev <c:if test="${newsPage.pageNumber <=1}">disabled</c:if>"><a
+						<c:if test="${newsPage.pageNumber > 1}">onclick="formSubmit('${newsPage.pageNumber-1}','false')";</c:if>>←
+							上一页</a></li>
+				</c:if>
+				<c:forEach begin="1" end="${newsPage.totalPage}"
+					var="pageNumber">
+					<c:if
+						test="${pageNumber+3>newsPage.pageNumber&&pageNumber-3<newsPage.pageNumber}">
+						<li
+							<c:if test="${pageNumber == newsPage.pageNumber}">class="active"</c:if>>
+							<a onclick="formSubmit('${pageNumber}','false');">${pageNumber}</a>
+						</li>
+					</c:if>
+				</c:forEach>
+				<c:if test="${newsPage.totalPage>0 }">
+					<li
+						class="next <c:if test="${newsPage.pageNumber == newsPage.totalPage}">disabled</c:if>"><a
+						<c:if test="${newsPage.pageNumber < newsPage.totalPage}">onclick="formSubmit('${newsPage.pageNumber+1}','false');"</c:if>>下一页
+							→ </a></li>
+					<li class="next"
+						onclick="formSubmit('${newsPage.totalPage}','false')"><a>尾页</a></li>
+				</c:if>
+			</ul>
+		</div>
+	</div>
+</body>
 </html>

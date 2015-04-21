@@ -1,9 +1,12 @@
 package com.zyl.dao.impl;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -21,6 +24,7 @@ import com.mongodb.DBObject;
 import com.zyl.bean.News;
 import com.zyl.dao.NewsDao;
 import com.zyl.util.MongoManager;
+import com.zyl.util.TimeUtil;
 
 @Repository("newsDao")
 public class NewsDaoImpl implements NewsDao {
@@ -78,15 +82,6 @@ public class NewsDaoImpl implements NewsDao {
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 //		// mysql删除语句写法：DELETE FROM XXX WHERE XXX = ？
 //		int nid = template.queryForInt("SELECT NID FROM News WHERE NTitle = ?",
 //				title);
@@ -96,13 +91,29 @@ public class NewsDaoImpl implements NewsDao {
 //		template.update("DELETE FROM News WHERE NID = ?", nid);
 
 	}
-
-	public Map<String,Object> getNewsTitlesByCateName(String cname) {
+	
+	//获取栏目所有的新闻总数
+	public long getNewsCountByCateName(String cname) {
+		//通过栏目名获取栏目id
+		obtainCollByName("category");
+		BasicDBObject cateQuery = new BasicDBObject("CName",cname);
+		DBObject category = coll.findOne(cateQuery);
+		ObjectId cateId = (ObjectId) category.get("_id");
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		List<String> title = new ArrayList<String>();
-		List<String> time = new ArrayList<String>();
-		List<String> nid = new ArrayList<String>();
+		//通过栏目id获取新闻对象
+		obtainCollByName("news");
+		BasicDBObject newsQuery = new BasicDBObject("CID",cateId);
+		
+		//获取栏目所有的新闻总数
+		long count = coll.count(newsQuery);
+		
+		return count;
+	}
+	
+
+	public List<News> getNewsTitlesByCateName(String cname, int skip, int limit) {
+		
+		List<News> newsList = new ArrayList<News>();
 		
 		//通过栏目名获取栏目id
 		obtainCollByName("category");
@@ -113,27 +124,76 @@ public class NewsDaoImpl implements NewsDao {
 		//通过栏目id获取新闻对象
 		obtainCollByName("news");
 		BasicDBObject newsQuery = new BasicDBObject("CID",cateId);
-		DBCursor cursor = coll.find(newsQuery);
+		BasicDBObject sortBy = new BasicDBObject("NTime", -1);
 		
+		DBCursor cursor = coll.find(newsQuery).sort(sortBy).skip(skip).limit(limit);
+
 		try {
 			while(cursor.hasNext()){
-				DBObject news = cursor.next();
-				title.add(news.get("NTitle").toString());
-				time.add(news.get("NTime").toString());
-				nid.add(news.get("_id").toString());
+				News news = new News();
+						
+				DBObject obj = cursor.next();
+				
+				news.setCategoryId(cateId);
+				news.setNid(obj.get("_id").toString());
+				news.setNauthor(obj.get("NAuthor").toString());
+				news.setNcontent(obj.get("NContent").toString());
+				news.setNeditor(obj.get("NEditor").toString());
+				
+				String dtStr = obj.get("NTime").toString();
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",Locale.US);
+				Date date = sdf.parse(dtStr);
+//				String formatStr2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+//				DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//				Date date2 = format1.parse(formatStr2);
+				
+				news.setNtime(date);
+				
+				news.setNtitle(obj.get("NTitle").toString());
+				
+				newsList.add(news);
 			}		
-			result.put("title", title);
-			result.put("time",time);
-			result.put("nid", nid);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			cursor.close();
 		}
-		return result;
+		
+		return newsList;
 		
 		
 		
+//		Map<String,Object> result = new HashMap<String,Object>();
+//		List<String> title = new ArrayList<String>();
+//		List<String> time = new ArrayList<String>();
+//		List<String> nid = new ArrayList<String>();
+//		
+//		//通过栏目名获取栏目id
+//		obtainCollByName("category");
+//		BasicDBObject cateQuery = new BasicDBObject("CName",cname);
+//		DBObject category = coll.findOne(cateQuery);
+//		ObjectId cateId = (ObjectId) category.get("_id");
+//		
+//		//通过栏目id获取新闻对象
+//		obtainCollByName("news");
+//		BasicDBObject newsQuery = new BasicDBObject("CID",cateId);
+//		DBCursor cursor = coll.find(newsQuery);
+//		
+//		try {
+//			while(cursor.hasNext()){
+//				DBObject news = cursor.next();
+//				title.add(news.get("NTitle").toString());
+//				time.add(news.get("NTime").toString());
+//				nid.add(news.get("_id").toString());
+//			}		
+//			result.put("title", title);
+//			result.put("time",time);
+//			result.put("nid", nid);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			cursor.close();
+//		}		
 		
 //		Map result = new HashMap();
 //		List title = new ArrayList();
@@ -293,6 +353,7 @@ public class NewsDaoImpl implements NewsDao {
 //		result.put("nid", nid);
 //		return result;
 	}
+
 
 
 }

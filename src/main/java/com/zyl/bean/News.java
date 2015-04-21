@@ -5,7 +5,7 @@ import java.util.Date;
 import org.bson.types.ObjectId;
 
 public class News {
-	private int nid;
+	private String nid;
 	private String url;
 	private String ntitle;
 	private String ncontent;
@@ -53,15 +53,19 @@ public class News {
 	public void setNeditor(String neditor) {
 		this.neditor = neditor;
 	}
-	public int getNid() {
-		return nid;
-	}
 	public ObjectId getCategoryId() {
 		return categoryId;
 	}
 	public void setCategoryId(ObjectId categoryId) {
 		this.categoryId = categoryId;
 	}
+	public String getNid() {
+		return nid;
+	}
+	public void setNid(String nid) {
+		this.nid = nid;
+	}
+	
 	
 	
 	

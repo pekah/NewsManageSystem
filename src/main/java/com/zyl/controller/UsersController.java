@@ -1,5 +1,6 @@
 package com.zyl.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,14 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.zyl.bean.Category;
+import com.zyl.bean.News;
+import com.zyl.service.AdminService;
 import com.zyl.service.UsersService;
 
 @Controller
@@ -21,6 +26,10 @@ public class UsersController {
 	@Autowired
 	@Qualifier("usersService")
 	private UsersService usersService;
+	
+	@Autowired
+	@Qualifier("adminService")
+	private AdminService adminService;
 	
 	@RequestMapping("register")
 	public ModelAndView register(HttpSession session,String username,String password) throws Exception
@@ -34,12 +43,45 @@ public class UsersController {
 	}	
 	
 	@RequestMapping("specifyNewsList")
-	public ModelAndView specifyNewsList(@RequestBody String cateName)
+	public ModelAndView specifyNewsList(String cname, Integer pageNumber)
 	{
-		ModelAndView mv = new ModelAndView();
+/*		ModelAndView mv = new ModelAndView();
 		mv.setViewName("json");
+		
 		Map result = usersService.getNewsTitlesByCateName(cateName);
-		mv.addObject("data",result);
+		mv.addObject("data",result);*/
+		
+		if(cname == null || "".equals(cname)){
+			cname = "羊城晚报";
+		}else{
+			try {
+				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		if(pageNumber == null){
+			pageNumber = 1;
+		}
+
+		ModelAndView mv = new ModelAndView();
+		
+		mv.addObject("currentCName", cname);
+		
+		//获取所有栏目
+		List<Category> category = adminService.getCategorys();
+		mv.addObject("category",category);
+		
+
+		Page<News> newsPage = usersService.getNewsTitlesByCateId(cname, pageNumber, Constants.pageSize);
+		
+		mv.addObject("newsPage",newsPage);
+		mv.addObject("pageNumber", pageNumber);
+		
+		mv.setViewName("users_index.jsp");
+		
 		return mv;
 	}
 
@@ -47,6 +89,11 @@ public class UsersController {
 	public ModelAndView viewNews(HttpServletRequest req,String nid)
 	{
 		ModelAndView mv = new ModelAndView();
+		
+		//获取所有栏目
+		List<Category> category = adminService.getCategorys();
+		mv.addObject("category",category);
+		
 		mv.setViewName("viewNews.jsp");
 		Map result = usersService.getNewsByNID(new ObjectId(nid));
 		mv.addObject("data",result);

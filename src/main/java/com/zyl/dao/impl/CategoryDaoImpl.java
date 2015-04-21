@@ -1,11 +1,8 @@
 package com.zyl.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.catalina.tribes.group.InterceptorPayload;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +13,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.zyl.bean.Category;
 import com.zyl.dao.CategoryDao;
 import com.zyl.util.MongoManager;
 
@@ -107,7 +105,7 @@ public class CategoryDaoImpl implements CategoryDao {
 //				CID);
 	}
 	
-	public List getCategorys() {
+	public List<Category> getCategorys() {
 //		List result = new ArrayList();
 //		List rows = template.queryForList("SELECT CName FROM Category");  		
 //		Iterator iter = rows.iterator();
@@ -118,7 +116,7 @@ public class CategoryDaoImpl implements CategoryDao {
 //		}
 //		return result;
 		
-		List<String> result = new ArrayList<String>();
+		List<Category> result = new ArrayList<Category>();
 		
 		obtainColl();
 		
@@ -126,9 +124,15 @@ public class CategoryDaoImpl implements CategoryDao {
 		
 		try {
 			while(cursor.hasNext()) {
+				Category cate = new Category();
 				DBObject category = cursor.next();
 				String cateName = (String) category.get("CName");
-				result.add(cateName);
+				ObjectId cid = (ObjectId)category.get("_id");
+				
+				cate.setCname(cateName);
+				cate.setCid(cid);
+				
+				result.add(cate);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

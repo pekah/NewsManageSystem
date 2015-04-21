@@ -34,7 +34,7 @@ public class LoginController {
 			if(u.getUname() != null)
 			{
 				session.setAttribute("name", u.getUname());
-				mv.setViewName("users_index.jsp");
+				return new ModelAndView("forward:/specifyNewsList.do");
 			}
 		}
 		else//管理员登录

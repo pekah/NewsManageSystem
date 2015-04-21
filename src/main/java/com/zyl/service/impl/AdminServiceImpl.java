@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.zyl.bean.Category;
 import com.zyl.bean.News;
 import com.zyl.dao.CategoryDao;
 import com.zyl.dao.NewsDao;
@@ -41,8 +42,12 @@ public class AdminServiceImpl implements AdminService {
 		categoryDao.removeCategory(name);
 	}
 	
-	public List getCategorys() {
+	public List<Category> getCategorys() {
 		return categoryDao.getCategorys();
+	}
+	
+	public ObjectId getCIdByCName(String cname) {
+		return categoryDao.getCategoryIdByName(cname);
 	}
 	
 	//手动添加新闻
