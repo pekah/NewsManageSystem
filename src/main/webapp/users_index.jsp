@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    }
 				});		 */	
 				
-				//点击搜索按钮	
+/* 				//点击搜索按钮	
 				$("#searchBtn").click(function(){
 					var keyword = $("#keyword").val();
 					//清空ul下的所有li
@@ -75,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						       
 						    }
 						});					
-				});
+				}); */
 		});
 		
 
@@ -139,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <input type="hidden" name="cname" value="${currentCName}" />
 		  <div class="form-group">
 			<input type="text" class="form-control" id="keyword"/>
-			<button type="button" class="btn btn-default" id="searchBtn">搜索</button>
+			<button type="button" class="btn btn-default" onclick="formSubmit(1,'false');">搜索</button>
 		  </div>
 		</form>
 	  </div>

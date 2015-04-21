@@ -72,6 +72,24 @@ public class UsersServiceImpl implements UsersService {
 		return newsPage;
 	}
 	
+	public Page<News> searchNews(String keyword, Integer pageNumber, Integer pageSize) {
+		int skip = pageSize * (pageNumber - 1);
+		
+		Map<String, Object> searchResult = newsDao.searchNews(keyword, skip, pageSize);
+		List<News> newsList = (List<News>) searchResult.get("newsList");
+		long count = (Long) searchResult.get("count");
+		
+		Page<News> newsPage = new Page<News>();
+		newsPage.setPageNumber(pageNumber);
+		newsPage.setPageSize(pageSize);
+		newsPage.setTotalPage(count % pageSize == 0 ? (count / pageSize) : (count / pageSize + 1)); 
+		newsPage.setTotalRow(count);
+		newsPage.setPageList(newsList);
+		
+		return newsPage;		
+	}
+
+	
 	public Map getNewsByNID(ObjectId nid) {
 		return newsDao.getNewsByNID(nid);
 	}
@@ -81,9 +99,6 @@ public class UsersServiceImpl implements UsersService {
 		reviewDao.addReview(nid, uid, content, GetDate.getDate());
 	}
 	
-	public Map searchNews(String keyword) {
-		return 	newsDao.searchNews(keyword);
-	}
 
 	
 }

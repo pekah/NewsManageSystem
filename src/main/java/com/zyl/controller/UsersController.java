@@ -45,12 +45,6 @@ public class UsersController {
 	@RequestMapping("specifyNewsList")
 	public ModelAndView specifyNewsList(String cname, Integer pageNumber)
 	{
-/*		ModelAndView mv = new ModelAndView();
-		mv.setViewName("json");
-		
-		Map result = usersService.getNewsTitlesByCateName(cateName);
-		mv.addObject("data",result);*/
-		
 		if(cname == null || "".equals(cname)){
 			cname = "羊城晚报";
 		}else{
@@ -73,9 +67,42 @@ public class UsersController {
 		//获取所有栏目
 		List<Category> category = adminService.getCategorys();
 		mv.addObject("category",category);
-		
 
 		Page<News> newsPage = usersService.getNewsTitlesByCateId(cname, pageNumber, Constants.pageSize);
+		
+		mv.addObject("newsPage",newsPage);
+		mv.addObject("pageNumber", pageNumber);
+		
+		mv.setViewName("users_index.jsp");
+		
+		return mv;
+	}
+	
+	@RequestMapping("searchNews")
+	public ModelAndView searchNews(String keyword, Integer pageNumber)
+	{
+		if(keyword == null || "".equals(keyword)){
+			return null;
+		}else{
+			try {
+				keyword = new String(keyword.getBytes("ISO-8859-1"),"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(pageNumber == null){
+			pageNumber = 1;
+		}
+
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("currentCName", "搜索结果");
+		
+		//获取所有栏目
+		List<Category> category = adminService.getCategorys();
+		mv.addObject("category",category);
+		
+		Page<News> newsPage = usersService.searchNews(keyword, pageNumber, Constants.pageSize);
 		
 		mv.addObject("newsPage",newsPage);
 		mv.addObject("pageNumber", pageNumber);
@@ -120,13 +147,5 @@ public class UsersController {
 		return mv;
 	}
 	
-	@RequestMapping("searchNews")
-	public ModelAndView searchNews(@RequestBody String keyword)
-	{
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("json");
-		Map result = usersService.searchNews(keyword);
-		mv.addObject("data",result);;
-		return mv;
-	}
+
 }

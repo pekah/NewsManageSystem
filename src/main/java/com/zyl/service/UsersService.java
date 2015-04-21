@@ -23,5 +23,5 @@ public interface UsersService {
 	//添加评论
 	public void addReview(String nid,String uname,String content);
 	//搜索新闻
-	public Map searchNews(String keyword);
+	public Page<News> searchNews(String keyword, Integer pageNumber, Integer pageSize);
 }

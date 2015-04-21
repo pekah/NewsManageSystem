@@ -1,6 +1,5 @@
 package com.zyl.dao.impl;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +23,6 @@ import com.mongodb.DBObject;
 import com.zyl.bean.News;
 import com.zyl.dao.NewsDao;
 import com.zyl.util.MongoManager;
-import com.zyl.util.TimeUtil;
 
 @Repository("newsDao")
 public class NewsDaoImpl implements NewsDao {
@@ -110,6 +108,49 @@ public class NewsDaoImpl implements NewsDao {
 		return count;
 	}
 	
+	public Map<String, Object> searchNews(String keyword, int skip, int limit) {
+		
+		obtainColl();
+		List<News> newsList = new ArrayList<News>();
+		Map<String, Object> searchResult = new HashMap<String, Object>();
+		
+		Pattern pattern=Pattern.compile("^.*" + keyword + ".*$");//正则表达式查询
+		 
+		BasicDBObject newsQuery = new BasicDBObject("NTitle", pattern);
+		BasicDBObject sortBy = new BasicDBObject("NTime", -1);
+		
+		DBCursor cursor = coll.find(newsQuery);
+		//获取查询结果总数
+		searchResult.put("count", cursor.size());
+		
+		cursor = cursor.sort(sortBy).skip(skip).limit(limit);
+		
+		try {
+			while(cursor.hasNext()){
+				News news = new News();
+				DBObject obj = cursor.next();
+				news.setNid(obj.get("NID").toString());
+				news.setNtitle(obj.get("NTitle").toString());
+				
+				String dtStr = obj.get("NTime").toString();
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",Locale.US);
+				Date date = sdf.parse(dtStr);
+				
+				news.setNtime(date);
+				
+				newsList.add(news);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cursor.close();
+		}
+		
+		searchResult.put("newsList", newsList);
+		
+		return searchResult;
+	}
 
 	public List<News> getNewsTitlesByCateName(String cname, int skip, int limit) {
 		
@@ -302,57 +343,6 @@ public class NewsDaoImpl implements NewsDao {
 		return result;
 	}
 
-	public Map<String,List<String>> searchNews(String keyword) {
-		
-		obtainColl();
-		Map<String,List<String>> result = new HashMap<String,List<String>>();
-		List<String> title = new ArrayList<String>();
-		List<String> time = new ArrayList<String>();
-		List<String> nid = new ArrayList<String>();
-		
-		Pattern pattern=Pattern.compile("^.*" + keyword + ".*$");//正则表达式查询
-		 
-		BasicDBObject newsQuery = new BasicDBObject("NTitle", pattern);
-		
-		DBCursor cursor = coll.find(newsQuery);
-		
-		try {
-			while(cursor.hasNext()){
-				DBObject news = cursor.next();
-				title.add(news.get("NTitle").toString());
-				time.add(news.get("NTime").toString());
-				nid.add(news.get("NID").toString());
-			}
-			result.put("title", title);
-			result.put("time", time);
-			result.put("nid", nid);		
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			cursor.close();
-		}
-		
-		return result;
-//		Map result = new HashMap();
-//		List title = new ArrayList();
-//		List time = new ArrayList();
-//		List nid = new ArrayList();
-//		List rows = template.queryForList(
-//				"SELECT NID,NTitle,NTime FROM News WHERE NTitle like ?", "%"
-//						+ keyword + "%");
-//		Iterator iter = rows.iterator();
-//		while (iter.hasNext()) {
-//			Map map = (Map) iter.next();
-//			title.add(map.get("NTitle"));
-//			Timestamp timestamp = (Timestamp) map.get("NTime");
-//			time.add(timestamp.toLocaleString());
-//			nid.add(map.get("NID"));
-//		}
-//		result.put("title", title);
-//		result.put("time", time);
-//		result.put("nid", nid);
-//		return result;
-	}
 
 
 

@@ -17,5 +17,5 @@ public interface NewsDao {
 	//通过新闻id查看某条新闻
 	public Map getNewsByNID(ObjectId nid);
 	//通过关键词模糊搜索新闻
-	public Map searchNews(String keyword);
+	public Map<String, Object> searchNews(String keyword, int skip, int limit);
 }
