@@ -3,6 +3,7 @@ package test;
 import java.util.ArrayList;
 
 import com.zyl.bean.News;
+import com.zyl.util.Spider;
 
 public class YangChenMain {
 	public static void main(String[] args) throws Exception {

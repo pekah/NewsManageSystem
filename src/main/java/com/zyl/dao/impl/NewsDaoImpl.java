@@ -1,5 +1,6 @@
 package com.zyl.dao.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.zyl.bean.News;
 import com.zyl.dao.NewsDao;
 import com.zyl.util.MongoManager;
 
@@ -38,17 +40,16 @@ public class NewsDaoImpl implements NewsDao {
 		coll = db.getCollection(collName);		
 	}
 
-	public void addNews(String title, String author, String editor, ObjectId cid,
-			String content, String time) {
+	public void addNews(News news) {
 
 		obtainColl();
+		
+		BasicDBObject _news = new BasicDBObject("NTitle", news.getNtitle())
+				.append("NContent", news.getNcontent()).append("NTime", news.getNtime())
+				.append("NAuthor", news.getNauthor()).append("NEditor", news.getNeditor())
+				.append("CID", news.getCategoryId());
 
-		BasicDBObject news = new BasicDBObject("NTitle", title)
-				.append("NContent", content).append("NTime", time)
-				.append("NAuthor", author).append("NEditor", editor)
-				.append("CID", cid);
-
-		coll.insert(news);
+		coll.insert(_news);
 
 		// template.update("INSERT INTO News(NTitle,NContent,NTime,NAuthor,NEditor,CID) VALUES(?,?,?,?,?,?)",
 		// new Object[]{title,content,time,author,editor,cid});
@@ -169,25 +170,29 @@ public class NewsDaoImpl implements NewsDao {
 		newsList.add((String)news.get("NContent"));
 		newsList.add((String)news.get("NAuthor"));
 		newsList.add((String)news.get("NEditor"));
-		newsList.add((String)news.get("NTime"));
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String fdate = format.format(news.get("NTime"));
+		newsList.add(fdate);
 		
 		BasicDBList ridList = (BasicDBList) news.get("RID");
 		
-		//新闻评论数量
-		newsList.add(ridList.size() + "");
-		
-		obtainCollByName("review");
-		
-		//将所有评论信息存放到reviewsList
-		for(Object rid : ridList){
-			List<String> reviews = new ArrayList<String>();
-			BasicDBObject reviewQuery = new BasicDBObject("_id", rid);
-			DBObject review = coll.findOne(reviewQuery);
-			reviews.add((String) review.get("RContent"));
-			reviews.add((String) review.get("UName"));
-			reviews.add((String) review.get("RTime"));
+		if(ridList != null){
+			//新闻评论数量
+			newsList.add(ridList.size() + "");
 			
-			reviewsList.add(reviews);
+			obtainCollByName("review");
+			
+			//将所有评论信息存放到reviewsList
+			for(Object rid : ridList){
+				List<String> reviews = new ArrayList<String>();
+				BasicDBObject reviewQuery = new BasicDBObject("_id", rid);
+				DBObject review = coll.findOne(reviewQuery);
+				reviews.add((String) review.get("RContent"));
+				reviews.add((String) review.get("UName"));
+				reviews.add((String) review.get("RTime"));
+				
+				reviewsList.add(reviews);
+			}			
 		}
 		
 		result.put("news", newsList);
@@ -288,4 +293,6 @@ public class NewsDaoImpl implements NewsDao {
 //		result.put("nid", nid);
 //		return result;
 	}
+
+
 }

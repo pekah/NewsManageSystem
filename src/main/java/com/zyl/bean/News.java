@@ -2,6 +2,8 @@ package com.zyl.bean;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 public class News {
 	private int nid;
 	private String url;
@@ -10,6 +12,7 @@ public class News {
 	private Date ntime;
 	private String nauthor;
 	private String neditor;
+	private ObjectId categoryId;
 	
 	public News() {
 		super();
@@ -53,6 +56,13 @@ public class News {
 	public int getNid() {
 		return nid;
 	}
+	public ObjectId getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(ObjectId categoryId) {
+		this.categoryId = categoryId;
+	}
+	
 	
 	
 }

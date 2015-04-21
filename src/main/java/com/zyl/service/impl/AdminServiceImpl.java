@@ -1,5 +1,6 @@
 package com.zyl.service.impl;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +11,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.zyl.bean.News;
 import com.zyl.dao.CategoryDao;
 import com.zyl.dao.NewsDao;
 import com.zyl.dao.UsersDao;
 import com.zyl.service.AdminService;
-import com.zyl.util.GetDate;
+import com.zyl.util.TimeUtil;
 
 @Service("adminService")
 public class AdminServiceImpl implements AdminService {
@@ -43,10 +45,16 @@ public class AdminServiceImpl implements AdminService {
 		return categoryDao.getCategorys();
 	}
 	
-	public void addNews(String title, String author, String editor,
-			String category, String content) {
+	//手动添加新闻
+	public void addNews(News news, String category){
 		ObjectId cid = categoryDao.getCategoryIdByName(category);
-		newsDao.addNews(title, author, editor, cid, content, GetDate.getDate());
+		news.setCategoryId(cid);
+		try {
+			news.setNtime(TimeUtil.getCurrentTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		newsDao.addNews(news);
 	}
 
 	public void adddNewsByRedis(String title, String author, String editor,

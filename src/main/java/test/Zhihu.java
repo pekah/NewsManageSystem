@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import com.zyl.util.Spider;
+
 
 public class Zhihu {
 	static Logger logger = Logger.getLogger(Zhihu.class);

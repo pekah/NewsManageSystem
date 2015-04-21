@@ -1,6 +1,5 @@
 package com.zyl.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.zyl.bean.News;
 import com.zyl.service.AdminService;
 
 @Controller
@@ -55,8 +55,15 @@ public class AdminController {
 		String editor1 = new String(editor.getBytes("ISO-8859-1"),"gbk");
 		String category1 = new String(category.getBytes("ISO-8859-1"),"gbk");
 		String content1 = new String(content.getBytes("ISO-8859-1"),"gbk");
+		
+		News news = new News();
+		news.setNtitle(title1);
+		news.setNauthor(author1);
+		news.setNeditor(editor1);
+		news.setNcontent(content1);
+		
 		ModelAndView mv = new ModelAndView();		
-		adminService.addNews(title1, author1, editor1, category1, content1);
+		adminService.addNews(news, category1);
 		mv.setViewName("admin_index.jsp");
 		return mv;
 	}

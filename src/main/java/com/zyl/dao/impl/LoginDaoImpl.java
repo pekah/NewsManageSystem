@@ -65,7 +65,7 @@ public class LoginDaoImpl implements LoginDao{
 	}
 	public Admin loginForAdminDAO(String username, String password) {
 		
-		obtainColl("users");
+		obtainColl("admins");
 		
 		Admin admins = new Admin();
 		

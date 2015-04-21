@@ -34,7 +34,7 @@ public class ReviewDaoImpl implements ReviewDao {
 	public void addReview(String nid, String uid, String content, String time) {
 		// 通过用户id获取用户名
 		obtainCollByName("users");
-		BasicDBObject usersQuery = new BasicDBObject("_id", uid);
+		BasicDBObject usersQuery = new BasicDBObject("_id", new ObjectId(uid));
 		DBObject users = coll.findOne(usersQuery);
 		String uname = (String) users.get("UName");
 

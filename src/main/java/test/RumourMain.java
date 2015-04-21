@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import com.zyl.bean.News;
+import com.zyl.util.Spider;
 
 public class RumourMain {
 	public static void main(String[] args) throws ParseException {
