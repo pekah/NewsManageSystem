@@ -129,7 +129,7 @@ public class NewsDaoImpl implements NewsDao {
 			while(cursor.hasNext()){
 				News news = new News();
 				DBObject obj = cursor.next();
-				news.setNid(obj.get("NID").toString());
+				news.setNid(obj.get("_id").toString());
 				news.setNtitle(obj.get("NTitle").toString());
 				
 				String dtStr = obj.get("NTime").toString();

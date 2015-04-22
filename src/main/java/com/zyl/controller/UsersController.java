@@ -106,6 +106,7 @@ public class UsersController {
 		
 		mv.addObject("newsPage",newsPage);
 		mv.addObject("pageNumber", pageNumber);
+		mv.addObject("keyword", keyword);
 		
 		mv.setViewName("users_index.jsp");
 		

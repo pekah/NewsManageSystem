@@ -77,7 +77,7 @@ public class UsersServiceImpl implements UsersService {
 		
 		Map<String, Object> searchResult = newsDao.searchNews(keyword, skip, pageSize);
 		List<News> newsList = (List<News>) searchResult.get("newsList");
-		long count = (Long) searchResult.get("count");
+		long count = Long.parseLong(searchResult.get("count").toString());
 		
 		Page<News> newsPage = new Page<News>();
 		newsPage.setPageNumber(pageNumber);

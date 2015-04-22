@@ -119,7 +119,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$(form).submit();
 		}
 		
-		
+		function search(pageNumber,flag){
+/* 			var form=$("#searchForm");
+			form.action="searchNews.do";
+			$("input[type='hidden'][name='pageNumber']").val(pageNumber);
+			$(form).submit();		 */
+			var keyword = $("#keyword").val();
+			if(keyword == undefined || keyword == null || keyword == ""){
+				keyword = 1;
+			}
+			window.open('searchNews.do?keyword=' + keyword)
+			
+		}
 	</script>
   </head>
   
@@ -134,12 +145,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 	  		<li><a href="specifyNewsList.do?cname=${cate.cname}">${cate.cname }</a></li>
 	 	  </c:forEach>
 		</ul>
-		<form class="navbar-form navbar-left" role="search" id="searchForm">
+		<form class="navbar-form navbar-left" role="search" id="searchForm" name="searchForm" action="">
 		  <input type="hidden" name="pageNumber" value="${newsPage.pageNumber}" />
 		  <input type="hidden" name="cname" value="${currentCName}" />
+		  <input type="hidden" name="keyword" value="${keyword}" />
 		  <div class="form-group">
 			<input type="text" class="form-control" id="keyword"/>
-			<button type="button" class="btn btn-default" onclick="formSubmit(1,'false');">搜索</button>
+			<!-- <button type="button" class="btn btn-default" onclick="window.open('searchNews.do?keyword=1')">搜索</button> -->
+			<button type="button" class="btn btn-default" onclick="search(1,'false')">搜索</button>
 		  </div>
 		</form>
 	  </div>
