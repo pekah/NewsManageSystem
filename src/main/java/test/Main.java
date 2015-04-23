@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.zyl.util.Spider;
+import com.zyl.bean.News;
+import test.Spider;
 
 public class Main {
 	
@@ -25,11 +26,12 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		String url = "http://www.zhihu.com/explore/recommendations";
-		String content = Spider.sendGet(url,"UTF-8");
+		String url = "http://view.news.qq.com/l/history_new/history_article/list201206115621.htm";
+		String content = Spider.sendGet(url,"GBK");
 		
-		ArrayList<Zhihu> myZhihu = Spider.GetRecommendations(content);
+		ArrayList<News> news = Spider.GetHistoryNews(content);
 
-		System.out.println(myZhihu);
+		System.out.println(news);
+		
 	}
 }

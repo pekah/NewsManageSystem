@@ -120,10 +120,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		
 		function search(pageNumber,flag){
-/* 			var form=$("#searchForm");
-			form.action="searchNews.do";
-			$("input[type='hidden'][name='pageNumber']").val(pageNumber);
-			$(form).submit();		 */
 			var keyword = $("#keyword").val();
 			if(keyword == undefined || keyword == null || keyword == ""){
 				keyword = 1;

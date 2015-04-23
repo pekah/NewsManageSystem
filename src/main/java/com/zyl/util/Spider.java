@@ -74,26 +74,26 @@ public class Spider {
 
 	}
 
-	public static ArrayList<Zhihu> GetRecommendations(String content) {
-		ArrayList<Zhihu> results = new ArrayList<Zhihu>();
-
-		// 用来匹配url，也就是问题的链接
-		// Pattern urlPattern =
-		// Pattern.compile("<h2>.+?question_link.+?href=\"(.+?)\".+?</h2>");
-		Pattern urlPattern = Pattern
-				.compile("question_link.+?href=\"(.+?)\".+?</h2>");
-		Matcher urlMatcher = urlPattern.matcher(content);
-
-		boolean isFind = urlMatcher.find();
-
-		while (isFind) {
-			Zhihu zhihuTemp = new Zhihu(urlMatcher.group(1));
-			results.add(zhihuTemp);
-			isFind = urlMatcher.find();
-		}
-
-		return results;
-	}
+//	public static ArrayList<Zhihu> GetRecommendations(String content) {
+//		ArrayList<Zhihu> results = new ArrayList<Zhihu>();
+//
+//		// 用来匹配url，也就是问题的链接
+//		// Pattern urlPattern =
+//		// Pattern.compile("<h2>.+?question_link.+?href=\"(.+?)\".+?</h2>");
+//		Pattern urlPattern = Pattern
+//				.compile("question_link.+?href=\"(.+?)\".+?</h2>");
+//		Matcher urlMatcher = urlPattern.matcher(content);
+//
+//		boolean isFind = urlMatcher.find();
+//
+//		while (isFind) {
+//			Zhihu zhihuTemp = new Zhihu(urlMatcher.group(1));
+//			results.add(zhihuTemp);
+//			isFind = urlMatcher.find();
+//		}
+//
+//		return results;
+//	}
 
 	//获取羊城晚报新闻链接
 	public static ArrayList<News> GetYCWBNewsLink(String content) {

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.zyl.bean.News;
+import com.zyl.util.TimeUtil;
 
 public class Spider {
 	static Logger logger = Logger.getLogger(HttpClientTest.class);
@@ -71,9 +71,66 @@ public class Spider {
 		return result;
 
 	}
+	
+	static ArrayList<News> GetHistoryNews(String content) {
+		ArrayList<News> newsList = new ArrayList<News>();
 
-	static ArrayList<Zhihu> GetRecommendations(String content) {
-		ArrayList<Zhihu> results = new ArrayList<Zhihu>();
+		// 用来匹配url，也就是问题的链接
+		// Pattern urlPattern =
+		// Pattern.compile("<h2>.+?question_link.+?href=\"(.+?)\".+?</h2>");
+		Pattern urlPattern = Pattern
+				.compile("·<a target.+?href=\"(.+?)\">");
+		Matcher urlMatcher = urlPattern.matcher(content);
+
+		boolean isFind = urlMatcher.find();
+
+		while (isFind) {
+			Pattern pattern;
+			Matcher matcher;		
+			
+			News news = new News();
+			
+			String _Url = urlMatcher.group(1);
+			String _content = Spider.sendGet(_Url,"GBK");
+
+			//匹配标题
+			pattern = Pattern.compile("<div class=\"hd\"><h1>(.+?)</h1>");
+			matcher = pattern.matcher(_content);
+			if(matcher.find()){
+				String title = matcher.group(1);
+				news.setNtitle(title);
+			}
+			
+			//匹配发布时间
+			pattern = Pattern.compile("<span class=\"article-time\">(.+?)</span>");
+			matcher = pattern.matcher(_content);
+			if(matcher.find()){
+				String time = matcher.group(1);
+				news.setNtime(TimeUtil.getFormatTime(time));
+			}
+			
+			//匹配内容
+			pattern = Pattern.compile("bosszone=\"content\">(.+?)</P></div>");
+			matcher = pattern.matcher(_content);
+			
+			boolean _isFind = matcher.find();
+			if(_isFind){
+				String ncontent = matcher.group(1);
+				news.setNcontent(ncontent);
+			}	
+			
+			
+			newsList.add(news);
+			
+			isFind = urlMatcher.find();
+		}
+
+		return newsList;
+	}
+
+
+	static ArrayList<News> GetRecommendations(String content) {
+		ArrayList<News> newsList = new ArrayList<News>();
 
 		// 用来匹配url，也就是问题的链接
 		// Pattern urlPattern =
@@ -85,12 +142,70 @@ public class Spider {
 		boolean isFind = urlMatcher.find();
 
 		while (isFind) {
-			Zhihu zhihuTemp = new Zhihu(urlMatcher.group(1));
-			results.add(zhihuTemp);
+			Pattern pattern;
+			Matcher matcher;		
+			
+			News news = new News();
+			
+			//内容由问题描述+回答组成
+			String finalContent = "";
+			String _Url = urlMatcher.group(1);
+			news.setUrl(_Url);
+			
+			//通过url获取知乎推荐内容
+			String newsUrl = news.getUrl();
+			
+			pattern = Pattern.compile("question/(.*?)/");
+			matcher = pattern.matcher(newsUrl);
+			if(matcher.find()){
+				newsUrl = "http://www.zhihu.com/question/" + matcher.group(1);
+			}	
+			
+			String _content = Spider.sendGet(newsUrl,"UTF-8");
+			
+
+			//匹配标题
+			pattern = Pattern.compile("zh-question-title.+?<h2.+?>(.+?)</h2>");
+			matcher = pattern.matcher(_content);
+			if(matcher.find()){
+				String title = matcher.group(1);
+				news.setNtitle(title);
+			}
+			//匹配描述
+			pattern = Pattern.compile("zh-question-detail.+?<div.+?>(.+?)</div>");
+			matcher = pattern.matcher(_content);
+			if(matcher.find()){
+				String description = matcher.group(1);
+				finalContent = finalContent + description + "<br/>";
+			}
+			
+			//匹配作者和编辑，同一个人
+			pattern = Pattern.compile("href=\"/people.+?href=\"/people.+?>(.+?)</a>，");
+			matcher = pattern.matcher(_content);
+			if(matcher.find()){
+				String author = matcher.group(1);
+				news.setNauthor(author);
+				news.setNeditor(author);
+			}
+			
+			//匹配答案
+			pattern = Pattern.compile("/answer/content.+?<div.+?>(.*?)</div>");
+			matcher = pattern.matcher(_content);
+			
+			boolean _isFind = matcher.find();
+			if(_isFind){
+				String answer = matcher.group(1);
+				finalContent = finalContent + answer + "<br/>";
+			}	
+			
+			news.setNcontent(finalContent);
+			
+			newsList.add(news);
+			
 			isFind = urlMatcher.find();
 		}
 
-		return results;
+		return newsList;
 	}
 
 	//获取羊城晚报新闻链接

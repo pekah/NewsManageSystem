@@ -90,9 +90,9 @@ public class SpiderController {
 	//抓取知乎推荐
 	@RequestMapping("news-zhihuRecommend")
 	public ModelAndView addZhihuRecommend(){
-		String url = "http://www.chinanews.com/world.shtml";
+		String url = "http://www.zhihu.com/explore/recommendations";
 			
-		spiderSerive.addNation(url, "国际热点");
+		spiderSerive.addZhihu(url, "知乎推荐");
 		
 		return null;
 	}	
