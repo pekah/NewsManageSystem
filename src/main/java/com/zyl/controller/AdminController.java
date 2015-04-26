@@ -12,6 +12,7 @@ import com.zyl.bean.News;
 import com.zyl.service.AdminService;
 
 @Controller
+@RequestMapping("admin")
 public class AdminController {
 	@Autowired
 	@Qualifier("adminService")
@@ -46,6 +47,14 @@ public class AdminController {
 		mv.addObject("data",result);
 		return mv;
 	}
+	
+	@RequestMapping("addNewsShow")
+	public ModelAndView addNewsShow()
+	{
+		ModelAndView mv = new ModelAndView();		
+		mv.setViewName("admin/news-add.jsp");
+		return mv;
+	}	
 	
 	@RequestMapping("addNews")
 	public ModelAndView addNews(String title,String author,String editor,String category,String content) throws Exception
