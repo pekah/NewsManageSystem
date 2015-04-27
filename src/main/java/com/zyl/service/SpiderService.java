@@ -1,9 +1,9 @@
 package com.zyl.service;
 
 public interface SpiderService {
-	public void addYoukuVideo(String url,String categoryName);
-	public void addRumour(String url, String categoryName);
-	public void addYCWB(String url, String categoryName);
-	public void addNation(String url, String categoryName);
-	public void addHistory(String url, String categoryName);
+	public int addYoukuVideo(String url,String categoryName);
+	public int addRumour(String url, String categoryName);
+	public int addYCWB(String url, String categoryName);
+	public int addNation(String url, String categoryName);
+	public int addHistory(String url, String categoryName);
 }

@@ -1,11 +1,14 @@
 package com.zyl.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.zyl.service.*;
+import com.zyl.bean.News;
+import com.zyl.service.SpiderService;
+import com.zyl.service.UsersService;
 @Controller
 @RequestMapping("spider")
 public class SpiderController {
@@ -14,18 +17,37 @@ public class SpiderController {
 	@Autowired
 	private SpiderService spiderSerive;
 	
+	@Autowired
+	@Qualifier("usersService")
+	private UsersService userSerivce;
+	
 	//抓取太极拳视频
 	@RequestMapping("news-taijiquan")
-	public ModelAndView addTaijiquan(){
-		String taijiquanUrl = "http://www.soku.com/search_video/q_%E5%A4%AA%E6%9E%81%E6%8B%B3_orderby_2";
-		
-		for(int i = 1; i <= FATCHPAGE; i++){
-			System.out.println("第" + i + "页");
-			taijiquanUrl = taijiquanUrl + "_page_" + i;
-			spiderSerive.addYoukuVideo(taijiquanUrl,"太极拳");
+	public ModelAndView addTaijiquan(Integer pageNumber){
+		if(pageNumber == null){
+			pageNumber = 1;
 		}
 		
-		return null;
+		ModelAndView mv = new ModelAndView();
+		String taijiquanUrl = "http://www.soku.com/search_video/q_%E5%A4%AA%E6%9E%81%E6%8B%B3_orderby_2";
+		
+		int total = 0;
+		
+//		for(int i = 1; i <= FATCHPAGE; i++){
+//			System.out.println("第" + i + "页");
+//			taijiquanUrl = taijiquanUrl + "_page_" + i;
+//			total += spiderSerive.addYoukuVideo(taijiquanUrl,"太极拳");
+//		}
+		
+		Page<News> newsPage = userSerivce.getNewsTitlesByCateId("太极拳", pageNumber, Constants.pageSize);
+		
+		mv.addObject("total",total);
+		mv.addObject("newsPage", newsPage);
+		mv.addObject("pageNumber", pageNumber);
+		
+		mv.setViewName("admin/spider-index.jsp");
+		
+		return mv;
 	}
 	
 	//抓取广场舞视频

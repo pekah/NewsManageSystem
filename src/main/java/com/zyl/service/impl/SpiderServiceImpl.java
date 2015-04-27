@@ -1,7 +1,5 @@
 package com.zyl.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +25,9 @@ public class SpiderServiceImpl implements SpiderService {
 	@Autowired
 	private SpiderDao spiderDao;
 	
-	public void addYoukuVideo(String url, String categoryName) {
+	public int addYoukuVideo(String url, String categoryName) {
+		//抓取新闻数
+		int total = 0;
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
 		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
@@ -80,16 +80,21 @@ public class SpiderServiceImpl implements SpiderService {
 			//将新闻保存到数据库
 			newsDao.addNews(news);
 			
+			total++;
+			
 			titleIsFind = titleMa.find();
 			urlIsFind = urlMa.find();
 			authorIsFind = authorMa.find();
 			timeIsFind = timeMa.find();
 			
 		}
+		
+		return total;
 			
 	}
 
-	public void addRumour(String url, String categoryName) {
+	public int addRumour(String url, String categoryName) {
+		int total = 0;
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
 		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
@@ -162,14 +167,19 @@ public class SpiderServiceImpl implements SpiderService {
 				
 				//将新闻保存到数据库
 				newsDao.addNews(news);
+				
+				total++;
 			}			
 			
 			isFind = urlMa.find();
 		}
+		
+		return total;
 				
 	}
 	
-	public void addYCWB(String url, String categoryName) {
+	public int addYCWB(String url, String categoryName) {
+		int total = 0;
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
 		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
@@ -244,6 +254,7 @@ public class SpiderServiceImpl implements SpiderService {
 					
 					//将新闻保存到数据库
 					newsDao.addNews(news);
+					total++;
 				}				
 				
 				
@@ -253,9 +264,11 @@ public class SpiderServiceImpl implements SpiderService {
 			divIsFind = divMa.find();
 		}		
 		
+		return total;
 	}
 
-	public void addNation(String url, String categoryName) {
+	public int addNation(String url, String categoryName) {
+		int total = 0;
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
 		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
@@ -321,18 +334,19 @@ public class SpiderServiceImpl implements SpiderService {
 					
 					//保存到数据库,待测试功能
 					newsDao.addNews(news);
-					
+					total++;
 				}	
 			}
 			isFind = urlMa.find();
 		}
 		
+		return total;
 	}
 	
 	
-	public void addHistory(String url, String categoryName) {
+	public int addHistory(String url, String categoryName) {
 		// TODO Auto-generated method stub
-		
+		return 0;
 	}
 	
 	/*public void addZhihu(String url, String categoryName) {

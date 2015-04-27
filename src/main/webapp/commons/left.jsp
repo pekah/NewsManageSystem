@@ -15,8 +15,6 @@
 
 <div class="col-sm-3 col-md-2 sidebar">
      <ul class="nav nav-sidebar">     	
-     	<%-- <li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/keywords/keywordset-list"><i class="glyphicon glyphicon-th-large"></i> 关键词集合管理</a></li> 	
-       --%>
       	<li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/admin/news-listAllNews.do"><i class="glyphicon glyphicon-th-large"></i>新闻管理</a></li>
      	
      	<li>
@@ -42,6 +40,8 @@
                 <li><a href="${appName}/cutting/similaritycutting-list" <c:if test="${menu==5}">style='color:white;background-color:#428bca'</c:if>><i class="glyphicon glyphicon-indent-left"></i>修改用户</a></li>
             </ul>
          </li>   
+         
+         <li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/admin/news-spider-index.do"><i class="glyphicon glyphicon-th-large"></i>爬虫管理</a></li>
      </ul>
    </div>
    

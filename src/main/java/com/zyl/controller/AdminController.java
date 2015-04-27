@@ -46,6 +46,13 @@ public class AdminController {
 		return mv;
 	}	
 	
+	@RequestMapping("news-spider-index")
+	public ModelAndView forwardSpider(){
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/spider-index.jsp");
+		return mv;
+	}	
+	
 	@RequestMapping("news-listAllNews")
 	public ModelAndView listAllNews(String keyword, Integer pageNumber) throws UnsupportedEncodingException{
 		if(pageNumber == null){
@@ -125,8 +132,8 @@ public class AdminController {
 		
 		adminService.removeNewsById(id);
 		
-		mv.addObject("status","success");
 		mv.setViewName("json");
+		mv.addObject("status","success");
 		
 		return mv;
 	}		
