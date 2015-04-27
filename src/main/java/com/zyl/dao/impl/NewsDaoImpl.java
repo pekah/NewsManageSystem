@@ -56,6 +56,23 @@ public class NewsDaoImpl implements NewsDao {
 		// template.update("INSERT INTO News(NTitle,NContent,NTime,NAuthor,NEditor,CID) VALUES(?,?,?,?,?,?)",
 		// new Object[]{title,content,time,author,editor,cid});
 	}
+	
+	public void removeNewsById(ObjectId id) {
+		//1,删除评论.2,删除新闻
+		obtainColl();
+		
+		BasicDBObject newsQuery = new BasicDBObject("_id", id);
+		
+		//删除评论
+		obtainCollByName("review");
+		BasicDBObject reviewQuery = new BasicDBObject("NId", id);
+		coll.remove(reviewQuery);
+		
+		//删除新闻
+		obtainCollByName("news");
+		coll.remove(newsQuery);
+		
+	}
 
 	public void removeNews(String title) {
 		//1,删除评论.2,删除新闻
@@ -75,8 +92,6 @@ public class NewsDaoImpl implements NewsDao {
 		//删除新闻
 		obtainCollByName("news");
 		coll.remove(newsQuery);
-		
-		
 		
 		
 		
@@ -114,9 +129,13 @@ public class NewsDaoImpl implements NewsDao {
 		List<News> newsList = new ArrayList<News>();
 		Map<String, Object> searchResult = new HashMap<String, Object>();
 		
-		Pattern pattern=Pattern.compile("^.*" + keyword + ".*$");//正则表达式查询
+		BasicDBObject newsQuery = new BasicDBObject();			
+		
+		if(!"".equals(keyword)){
+			Pattern pattern = Pattern.compile("^.*" + keyword + ".*$");//正则表达式查询
+			newsQuery = new BasicDBObject("NTitle", pattern);
+		}
 		 
-		BasicDBObject newsQuery = new BasicDBObject("NTitle", pattern);
 		BasicDBObject sortBy = new BasicDBObject("NTime", -1);
 		
 		DBCursor cursor = coll.find(newsQuery);
@@ -131,6 +150,57 @@ public class NewsDaoImpl implements NewsDao {
 				DBObject obj = cursor.next();
 				news.setNid(obj.get("_id").toString());
 				news.setNtitle(obj.get("NTitle").toString());
+				
+				String dtStr = obj.get("NTime").toString();
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",Locale.US);
+				Date date = sdf.parse(dtStr);
+				
+				news.setNtime(date);
+				
+				newsList.add(news);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cursor.close();
+		}
+		
+		searchResult.put("newsList", newsList);
+		
+		return searchResult;
+	}
+	
+	public Map<String, Object> listAllNews(String keyword, int skip, int limit) {
+		obtainColl();
+		List<News> newsList = new ArrayList<News>();
+		Map<String, Object> searchResult = new HashMap<String, Object>();
+		
+		BasicDBObject newsQuery = new BasicDBObject();			
+		
+		if(!"".equals(keyword)){
+			Pattern pattern = Pattern.compile("^.*" + keyword + ".*$");//正则表达式查询
+			newsQuery = new BasicDBObject("NTitle", pattern);
+		}
+		
+		BasicDBObject sortBy = new BasicDBObject("NTime", -1);
+		
+		DBCursor cursor = coll.find(newsQuery);
+		//获取查询结果总数
+		searchResult.put("count", cursor.size());
+		
+		cursor = cursor.sort(sortBy).skip(skip).limit(limit);
+		
+		try {
+			while(cursor.hasNext()){
+				News news = new News();
+				DBObject obj = cursor.next();
+				news.setNid(obj.get("_id").toString());
+				news.setNtitle(obj.get("NTitle").toString());
+//				news.setNcontent(obj.get("NContent").toString());
+				news.setNauthor(obj.get("NAuthor").toString());
+				news.setNeditor(obj.get("NEditor").toString());
+				news.setCategoryId((ObjectId)obj.get("CID"));
 				
 				String dtStr = obj.get("NTime").toString();
 				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",Locale.US);

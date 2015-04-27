@@ -17,18 +17,7 @@
      <ul class="nav nav-sidebar">     	
      	<%-- <li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/keywords/keywordset-list"><i class="glyphicon glyphicon-th-large"></i> 关键词集合管理</a></li> 	
        --%>
-      	<li>
-     		<a href="#" class="tree">
-              <i class="glyphicon glyphicon-th-large"></i>
-              <span>新闻管理 </span>
-              <i class="glyphicon  <c:if test="${menu==7||menu==8||menu==9||menu==10}">glyphicon-chevron-down</c:if><c:if test="${!(menu==7||menu==8||menu==9||menu==10)}">glyphicon-chevron-left</c:if> myicon"></i>
-          </a>
-          <ul class="nav nav-self" <c:if test="${menu==7||menu==8||menu==9||menu==10}">style='display:block;'</c:if>>
-            <li><a href="${appName}/admin/addNewsShow.do" onclick="addKeywordset();" <c:if test="${menu==10}">style='color:white;background-color:#428bca'</c:if>><i class="glyphicon glyphicon-indent-left"></i>添加新闻</a></li>
-            <li><a href="${appName}/admin/removeNewsShow.do" <c:if test="${menu==7}">style='color:white;background-color:#428bca'</c:if>><i class="glyphicon glyphicon-indent-left"></i>删除新闻</a></li>
-            <li><a href="${appName}/admin/sentencesSet-list.do" <c:if test="${menu==8}">style='color:white;background-color:#428bca'</c:if>><i class="glyphicon glyphicon-indent-left"></i>修改新闻</a></li>
-          </ul>
-     	</li>  
+      	<li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/admin/news-listAllNews.do"><i class="glyphicon glyphicon-th-large"></i>新闻管理</a></li>
      	
      	<li>
      		<a href="#" class="tree">

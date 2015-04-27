@@ -110,7 +110,7 @@ public class Spider {
 			}
 			
 			//匹配内容
-			pattern = Pattern.compile("bosszone=\"content\">(.+?)</P></div>");
+			pattern = Pattern.compile("bossZone=\"content\">(.+?)</P></div>");
 			matcher = pattern.matcher(_content);
 			
 			boolean _isFind = matcher.find();
@@ -118,6 +118,7 @@ public class Spider {
 				String ncontent = matcher.group(1);
 				news.setNcontent(ncontent);
 			}	
+			
 			
 			
 			newsList.add(news);

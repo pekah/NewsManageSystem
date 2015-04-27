@@ -26,14 +26,11 @@
 			<%@ include file="/commons/left.jsp"%>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<form id="searchForm" class="form-inline" role="form" method="post">
-					<input type="hidden" name="pageNumber" value="${keywordSetPage.pageNumber}" />
-					<!-- <button class="btn btn-primary" type="button" onclick="addKeywordset();">新增关键词与关键句子</button> -->
+					<input type="hidden" name="pageNumber" value="${newsPage.pageNumber}" />
+					<button class="btn btn-primary" type="button" onclick="addNews();">添加新闻</button>
 					<br><br>
 					<div class="form-group">
-						<label for="keywordValue">关键词 </label> 
-						<input id="keyword"
-							 name="keywordValue" class="form-control" placeholder="关键词"
-							 value="${keywordValue}">
+						<input type="text" name="keyword" class="form-control" placeholder="标题或内容" value="${keyword}">
 					</div>	
 					
 					<button type="button" class="btn btn-danger"
@@ -46,18 +43,37 @@
 					<table id="dataTable" class="table table-striped">
 						<thead>
 							<tr>
-								<th>sample_hashcode</th>
-								<th>关键词</th>
-								<th>关键句子</th>
+								<th>标题</th>
+								<!-- <th>内容</th> -->
+								<th>时间</th>
+								<th>作者</th>
+								<th>编辑</th>
+							<!-- 	<th>栏目</th> -->
+								
 								
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="keywordSet" items="${keywordSetPage.pageList}">
+							<c:forEach var="news" items="${newsPage.pageList}">
 								<tr>
-									<td>${keywordSet.sample_hashcode}</td>
-									<td>${keywordSet.keyword}</td>
-									<td>${keywordSet.sentence}</td>
+								
+									<td>${news.ntitle}</td>
+									<%-- <td>${news.ncontent}</td> --%>
+									<td>${news.ntime}</td>
+									<td>${news.nauthor}</td>
+									<td>${news.neditor}</td>
+									<td>
+										<div class="btn-group">
+											<button
+												onclick="toDeleteNews('${news.nid}')"
+												type="button" class="btn btn-danger" data-toggle="dropdown"
+												style="margin-right: 10px;">删除</button>
+											<button
+												onclick="toModifyNew('${news.nid}')"
+												type="button" class="btn btn-primary" data-toggle="dropdown"
+												style="margin-right: 10px;">修改</button>
+										</div>									
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -68,35 +84,35 @@
 				<!-- 分页div -->				 
 				<div class="col-xs-6">
 					<div class="dataTables_info" id="example2_info">总共
-						${keywordSetPage.totalRow} 记录</div>
+						${newsPage.totalRow} 记录</div>
 				</div>
 				<div class="col-xs-6">
 					<div class="dataTables_paginate paging_bootstrap">
 						<ul class="pagination">
-							<c:if test="${keywordSetPage.totalPage>0 }">
+							<c:if test="${newsPage.totalPage>0 }">
 								<li class="prev" onclick="formSubmit('1','false')"><a>首页</a></li>
 								<li
-									class="prev <c:if test="${keywordSetPage.pageNumber <=1}">disabled</c:if>"><a
-									<c:if test="${keywordSetPage.pageNumber > 1}">onclick="formSubmit('${keywordSetPage.pageNumber-1}','false')";</c:if>>←
+									class="prev <c:if test="${newsPage.pageNumber <=1}">disabled</c:if>"><a
+									<c:if test="${newsPage.pageNumber > 1}">onclick="formSubmit('${newsPage.pageNumber-1}','false')";</c:if>>←
 										上一页</a></li>
 							</c:if>
-							<c:forEach begin="1" end="${keywordSetPage.totalPage}"
+							<c:forEach begin="1" end="${newsPage.totalPage}"
 								var="pageNumber">
 								<c:if
-									test="${pageNumber+3>keywordSetPage.pageNumber&&pageNumber-3<keywordSetPage.pageNumber}">
+									test="${pageNumber+3>newsPage.pageNumber&&pageNumber-3<newsPage.pageNumber}">
 									<li
-										<c:if test="${pageNumber == keywordSetPage.pageNumber}">class="active"</c:if>>
+										<c:if test="${pageNumber == newsPage.pageNumber}">class="active"</c:if>>
 										<a onclick="formSubmit('${pageNumber}','false');">${pageNumber}</a>
 									</li>
 								</c:if>
 							</c:forEach>
-							<c:if test="${keywordSetPage.totalPage>0 }">
+							<c:if test="${newsPage.totalPage>0 }">
 								<li
-									class="next <c:if test="${keywordSetPage.pageNumber == keywordSetPage.totalPage}">disabled</c:if>"><a
-									<c:if test="${keywordSetPage.pageNumber < keywordSetPage.totalPage}">onclick="formSubmit('${keywordSetPage.pageNumber+1}','false');"</c:if>>下一页
+									class="next <c:if test="${newsPage.pageNumber == newsPage.totalPage}">disabled</c:if>"><a
+									<c:if test="${newsPage.pageNumber < newsPage.totalPage}">onclick="formSubmit('${newsPage.pageNumber+1}','false');"</c:if>>下一页
 										→ </a></li>
 								<li class="next"
-									onclick="formSubmit('${keywordSetPage.totalPage}','false')"><a>尾页</a></li>
+									onclick="formSubmit('${newsPage.totalPage}','false')"><a>尾页</a></li>
 							</c:if>
 						</ul>
 					</div>
@@ -108,9 +124,24 @@
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true"></div>
 	<script>
+	function toDeleteNews(nid) {
+ 		$('#myModal').load("${appName}/admin/news-del-show.do",{"nid":nid},function(){
+			$('#myModal').modal('show');
+		});
+	}
+
+	function toModifyNew(id) {
+		$('#myModal')
+				.load(
+						"${appName}/admin/new-modify-show",
+						function() {
+							$("input[name='accountId']").val(id);
+							$('#myModal').modal('show');
+						});
+	}
 	
-	function addKeywordset() {
-		$('#myModal').load("${appName}/keywords/keywordset-add-show",function(){
+	function addNews() {
+		$('#myModal').load("${appName}/admin/news-add-show.do",function(){
 			$('#myModal').modal('show');
 		});
 	}

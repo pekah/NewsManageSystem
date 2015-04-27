@@ -41,7 +41,7 @@ public class LoginController {
 			if(a.getAname() != null)
 			{
 				session.setAttribute("name", a.getAname());
-				mv.setViewName("admin_index.jsp");
+				mv.setViewName("forward:/admin/news-listAllNews.do");
 			}
 		}
 		

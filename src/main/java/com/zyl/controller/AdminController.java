@@ -1,15 +1,19 @@
 package com.zyl.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.zyl.bean.Category;
 import com.zyl.bean.News;
 import com.zyl.service.AdminService;
+import com.zyl.service.UsersService;
 
 @Controller
 @RequestMapping("admin")
@@ -17,6 +21,10 @@ public class AdminController {
 	@Autowired
 	@Qualifier("adminService")
 	private AdminService adminService;
+	
+	@Autowired
+	@Qualifier("usersService")
+	private UsersService userSerivce;
 	
 	@RequestMapping("addCate")
 	public ModelAndView addCategory(String cateName) throws Exception
@@ -38,44 +46,90 @@ public class AdminController {
 		return mv;
 	}	
 	
+	@RequestMapping("news-listAllNews")
+	public ModelAndView listAllNews(String keyword, Integer pageNumber) throws UnsupportedEncodingException{
+		if(pageNumber == null){
+			pageNumber = 1;
+		}
+		
+		if (keyword == null || keyword.length() <= 0) {
+		    keyword = "";
+		}
+		
+		String kw = new String(keyword.getBytes("ISO-8859-1"),"UTF-8");
+		
+		ModelAndView mv = new ModelAndView();
+		
+		Page<News> newsPage = userSerivce.listAllNews(kw, pageNumber, Constants.pageSize);
+		
+		mv.addObject("newsPage", newsPage);
+		mv.addObject("keyword", kw);
+		mv.addObject("pageNumber", pageNumber);
+		
+		mv.setViewName("admin_index2.jsp");
+		
+		return mv;
+	}
+	
 	@RequestMapping("getCategorys")
 	public ModelAndView getCategorys()
 	{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("json");
-		List result = adminService.getCategorys();
+		List<Category> result = adminService.getCategorys();
 		mv.addObject("data",result);
 		return mv;
 	}
 	
-	@RequestMapping("addNewsShow")
+	@RequestMapping("news-add-show")
 	public ModelAndView addNewsShow()
 	{
 		ModelAndView mv = new ModelAndView();		
-		mv.setViewName("admin/news-add.jsp");
+		List<Category> catrgories = adminService.getCategorys();
+		mv.addObject("result",catrgories);
+		mv.setViewName("admin/news-add-show.jsp");
 		return mv;
 	}	
 	
-	@RequestMapping("addNews")
+	@RequestMapping("news-add-operate")
 	public ModelAndView addNews(String title,String author,String editor,String category,String content) throws Exception
 	{
-		String title1 = new String(title.getBytes("ISO-8859-1"),"gbk");
-		String author1 = new String(author.getBytes("ISO-8859-1"),"gbk");
-		String editor1 = new String(editor.getBytes("ISO-8859-1"),"gbk");
-		String category1 = new String(category.getBytes("ISO-8859-1"),"gbk");
-		String content1 = new String(content.getBytes("ISO-8859-1"),"gbk");
-		
 		News news = new News();
-		news.setNtitle(title1);
-		news.setNauthor(author1);
-		news.setNeditor(editor1);
-		news.setNcontent(content1);
+		news.setNtitle(title);
+		news.setNauthor(author);
+		news.setNeditor(editor);
+		news.setNcontent(content);
 		
 		ModelAndView mv = new ModelAndView();		
-		adminService.addNews(news, category1);
-		mv.setViewName("admin_index.jsp");
+		adminService.addNews(news, category);
+		mv.addObject("status","success");
+		mv.setViewName("json");
 		return mv;
 	}
+	
+	@RequestMapping("news-del-show")
+	public ModelAndView delNewsShow(String nid)
+	{
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("nid", nid);
+		mv.setViewName("admin/news-del-show.jsp");
+		return mv;
+	}		
+	
+	@RequestMapping("news-del-operate")
+	public ModelAndView delNews(String nid)
+	{
+		ModelAndView mv = new ModelAndView();
+
+		ObjectId id = new ObjectId(nid);
+		
+		adminService.removeNewsById(id);
+		
+		mv.addObject("status","success");
+		mv.setViewName("json");
+		
+		return mv;
+	}		
 	
 	@RequestMapping("removeNews")
 	public ModelAndView removeNews(String newsTitle) throws Exception

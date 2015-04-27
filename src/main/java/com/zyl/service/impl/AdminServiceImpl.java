@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
 		}
 		newsDao.addNews(news);
 	}
-
+	
 	public void adddNewsByRedis(String title, String author, String editor,
 			String category, String content) {
 			Gson gson = new Gson();
@@ -81,8 +81,17 @@ public class AdminServiceImpl implements AdminService {
 		newsDao.removeNews(title);
 	}
 	
+	
+	//通过id删除新闻
+	public void removeNewsById(ObjectId nid) {
+		newsDao.removeNewsById(nid);
+	}
+
+	
 	public void addUsers(String username, String password) {
 		// TODO Auto-generated method stub
 		usersDao.addUsers(username, password);
 	}
+
+
 }

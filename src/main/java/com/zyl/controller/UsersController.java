@@ -81,8 +81,8 @@ public class UsersController {
 	@RequestMapping("searchNews")
 	public ModelAndView searchNews(String keyword, Integer pageNumber)
 	{
-		if(keyword == null || "".equals(keyword)){
-			return null;
+		if (keyword == null || keyword.length() <= 0) {
+		    keyword = "";
 		}else{
 			try {
 				keyword = new String(keyword.getBytes("ISO-8859-1"),"UTF-8");

@@ -18,4 +18,8 @@ public interface NewsDao {
 	public Map getNewsByNID(ObjectId nid);
 	//通过关键词模糊搜索新闻
 	public Map<String, Object> searchNews(String keyword, int skip, int limit);
+	//查看所有新闻
+	public Map<String, Object> listAllNews(String keyword, int skip, int limit);
+	//通过id删除新闻
+	public void removeNewsById(ObjectId id);
 }

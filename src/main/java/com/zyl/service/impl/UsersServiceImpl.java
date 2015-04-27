@@ -88,6 +88,24 @@ public class UsersServiceImpl implements UsersService {
 		
 		return newsPage;		
 	}
+	
+	public Page<News> listAllNews(String keyword, Integer pageNumber, Integer pageSize) {
+		int skip = pageSize * (pageNumber - 1);
+		
+		Map<String, Object> searchResult = newsDao.listAllNews(keyword, skip, pageSize);
+		@SuppressWarnings("unchecked")
+		List<News> newsList = (List<News>) searchResult.get("newsList");
+		long count = Long.parseLong(searchResult.get("count").toString());
+		
+		Page<News> newsPage = new Page<News>();
+		newsPage.setPageNumber(pageNumber);
+		newsPage.setPageSize(pageSize);
+		newsPage.setTotalPage(count % pageSize == 0 ? (count / pageSize) : (count / pageSize + 1)); 
+		newsPage.setTotalRow(count);
+		newsPage.setPageList(newsList);
+		
+		return newsPage;		
+	}
 
 	
 	public Map getNewsByNID(ObjectId nid) {

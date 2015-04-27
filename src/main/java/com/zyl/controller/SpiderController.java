@@ -87,12 +87,12 @@ public class SpiderController {
 		return null;
 	}	
 	
-	//抓取知乎推荐
-	@RequestMapping("news-zhihuRecommend")
+	//抓取历史新闻
+	@RequestMapping("news-history")
 	public ModelAndView addZhihuRecommend(){
-		String url = "http://www.zhihu.com/explore/recommendations";
+		String url = "http://view.news.qq.com/l/history_new/history_article/list201206115621.htm";
 			
-		spiderSerive.addZhihu(url, "知乎推荐");
+		spiderSerive.addHistory(url, "历史新闻");
 		
 		return null;
 	}	

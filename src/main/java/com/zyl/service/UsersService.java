@@ -20,6 +20,8 @@ public interface UsersService {
 	public Page<News> getNewsTitlesByCateId(String cname, Integer pageNumber, Integer pageSize);
 	//通过新闻id查看某条新闻
 	public Map getNewsByNID(ObjectId nid);
+	//查看所有新闻
+	public Page<News> listAllNews(String keyword, Integer pageNumber, Integer pageSize);
 	//添加评论
 	public void addReview(String nid,String uname,String content);
 	//搜索新闻

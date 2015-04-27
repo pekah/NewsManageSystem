@@ -329,7 +329,13 @@ public class SpiderServiceImpl implements SpiderService {
 		
 	}
 	
-	public void addZhihu(String url, String categoryName) {
+	
+	public void addHistory(String url, String categoryName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/*public void addZhihu(String url, String categoryName) {
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
 		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
@@ -412,5 +418,5 @@ public class SpiderServiceImpl implements SpiderService {
 			isFind = urlMatcher.find();
 		}	
 				
-	}
+	}*/
 }
