@@ -63,7 +63,7 @@
 			<button type="button" class="btn btn-default reload-button"
 				data-dismiss="modal">关闭</button>
 			<button type="button" class="btn btn-primary" id="saveButton"
-				onclick="savePerm();">保存</button>
+				onclick="saveNews();">保存</button>
 		</div>
 	</div>
 </div>
@@ -71,7 +71,7 @@
 	$(document).ready(function(){
 		$(".chosen-select").chosen({width:"250px"});
 	});
-  	function savePerm(){
+  	function saveNews(){
   		var title=$("input[name='title']").val();
   		var author=$("input[name='author']").val();
   		var editor=$("input[name='editor']").val();

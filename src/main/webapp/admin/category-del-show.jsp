@@ -6,25 +6,25 @@
 		<div class="modal-header">
 			<button type="button" class="close reload-button"
 				data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h4 class="modal-title" id="myModalLabel">删除新闻</h4>
+			<h4 class="modal-title" id="myModalLabel">删除栏目</h4>
 		</div>
 		<div class="modal-body" id="content-body">
-			<input type="hidden" name="nid" value="${nid}" /> 确认删除新闻？
+			<input type="hidden" name="cname" value="${cname}" /> 确认删除栏目？
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-default reload-button"
 				data-dismiss="modal">关闭</button>
 			<button type="button" class="btn btn-primary" id="saveButton"
-				onclick="delNews(this);">确认</button>
+				onclick="delCategory(this);">确认</button>
 		</div>
 	</div>
 </div>
 <script>
-  	function delNews(btn){
+  	function delCategory(btn){
   		$.ajax({
-		        url:"${appName}/admin/news-del-operate.do",  
+		        url:"${appName}/admin/category-del-operate.do",  
 		        type:"post",
-		        data:{"nid":$("input[name='nid']").val()},
+		        data:{"cname":$("input[name='cname']").val()},
 		        dataType:"json",  
 		        success:function(jsonData){
 	        		$("#content-body").html("删除成功");

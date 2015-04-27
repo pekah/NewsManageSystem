@@ -78,6 +78,8 @@ public class CategoryDaoImpl implements CategoryDao {
 		}
 		//删除栏目
 		obtainCollByName("category");
+		
+		cateQuery = new BasicDBObject("_id", CID);
 		coll.remove(cateQuery);
 		
 		

@@ -26,15 +26,15 @@ public class AdminController {
 	@Qualifier("usersService")
 	private UsersService userSerivce;
 	
-	@RequestMapping("addCate")
-	public ModelAndView addCategory(String cateName) throws Exception
-	{
-		String name = new String(cateName.getBytes("ISO-8859-1"),"gbk");
-		ModelAndView mv = new ModelAndView();
-		adminService.addCategory(name);
-		mv.setViewName("admin_index.jsp");
-		return mv;
-	}
+//	@RequestMapping("addCate")
+//	public ModelAndView addCategory(String cateName) throws Exception
+//	{
+//		String name = new String(cateName.getBytes("ISO-8859-1"),"gbk");
+//		ModelAndView mv = new ModelAndView();
+//		adminService.addCategory(name);
+//		mv.setViewName("admin_index.jsp");
+//		return mv;
+//	}
 	
 	@RequestMapping("removeCate")
 	public ModelAndView removeCategory(String cateName) throws Exception
@@ -78,6 +78,20 @@ public class AdminController {
 		return mv;
 	}
 	
+	@RequestMapping("news-listAllCategory")
+	public ModelAndView listAllCategory(){
+		ModelAndView mv = new ModelAndView();
+		
+		List<Category> catrgories = adminService.getCategorys();
+		
+		mv.addObject("catrgories",catrgories);
+		mv.setViewName("admin/category-list.jsp");
+		
+		return mv;
+	}	
+	
+	
+	
 	@RequestMapping("getCategorys")
 	public ModelAndView getCategorys()
 	{
@@ -87,6 +101,27 @@ public class AdminController {
 		mv.addObject("data",result);
 		return mv;
 	}
+	
+	@RequestMapping("category-add-show")
+	public ModelAndView addCategoryShow(String cname)
+	{
+		ModelAndView mv = new ModelAndView();	
+		mv.addObject("cname", cname);
+		mv.setViewName("admin/category-add-show.jsp");
+		return mv;
+	}	
+	
+	@RequestMapping("category-add-operate")
+	public ModelAndView addCategory(String cname) throws Exception
+	{
+		ModelAndView mv = new ModelAndView();		
+		adminService.addCategory(cname);
+		mv.addObject("status","success");
+		mv.setViewName("json");
+		return mv;
+	}
+		
+
 	
 	@RequestMapping("news-add-show")
 	public ModelAndView addNewsShow()
@@ -114,6 +149,15 @@ public class AdminController {
 		return mv;
 	}
 	
+	@RequestMapping("category-del-show")
+	public ModelAndView delCategoryShow(String cname)
+	{
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("cname", cname);
+		mv.setViewName("admin/category-del-show.jsp");
+		return mv;
+	}		
+	
 	@RequestMapping("news-del-show")
 	public ModelAndView delNewsShow(String nid)
 	{
@@ -121,7 +165,20 @@ public class AdminController {
 		mv.addObject("nid", nid);
 		mv.setViewName("admin/news-del-show.jsp");
 		return mv;
-	}		
+	}	
+	
+	@RequestMapping("category-del-operate")
+	public ModelAndView delCategory(String cname)
+	{
+		ModelAndView mv = new ModelAndView();
+
+		adminService.removeCategory(cname);
+		
+		mv.setViewName("json");
+		mv.addObject("status","success");
+		
+		return mv;
+	}	
 	
 	@RequestMapping("news-del-operate")
 	public ModelAndView delNews(String nid)

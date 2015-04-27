@@ -16,18 +16,7 @@
 <div class="col-sm-3 col-md-2 sidebar">
      <ul class="nav nav-sidebar">     	
       	<li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/admin/news-listAllNews.do"><i class="glyphicon glyphicon-th-large"></i>新闻管理</a></li>
-     	
-     	<li>
-     		<a href="#" class="tree">
-              <i class="glyphicon glyphicon-th-large"></i>
-              <span>栏目管理</span>
-              <i class="glyphicon  <c:if test="${menu==2||menu==3}">glyphicon-chevron-down</c:if><c:if test="${!(menu==2||menu==3)}">glyphicon-chevron-left</c:if> myicon"></i>
-          </a>
-          <ul class="nav nav-self" <c:if test="${menu==2||menu==3}">style='display:block;'</c:if>>
-            <li><a href="${appName}/sensitive/sensitivekind-list" <c:if test="${menu==2}">style='color:white;background-color:#428bca'</c:if>><i class="glyphicon glyphicon-indent-left"></i>添加栏目</a></li>
-            <li><a href="${appName}/sensitive/sensitiveword-list" <c:if test="${menu==3}">style='color:white;background-color:#428bca'</c:if>><i class="glyphicon glyphicon-indent-left"></i>删除栏目</a></li>
-          </ul>
-     	</li> 
+     	<li <c:if test="${menu==1}"> class='active'</c:if>><a href="${appName}/admin/news-listAllCategory.do"><i class="glyphicon glyphicon-th-large"></i>栏目管理</a></li>
      	<li>
             <a href="#" class="tree">
                 <i class="glyphicon glyphicon-th-large"></i>
