@@ -222,7 +222,7 @@ public class NewsDaoImpl implements NewsDao {
 		return searchResult;
 	}
 
-	public List<News> getNewsTitlesByCateName(String cname, int skip, int limit) {
+	public List<News> getNewsByCateName(String cname, int skip, int limit) {
 		
 		List<News> newsList = new ArrayList<News>();
 		

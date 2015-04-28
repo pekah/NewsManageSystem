@@ -68,7 +68,7 @@ public class UsersController {
 		List<Category> category = adminService.getCategorys();
 		mv.addObject("category",category);
 
-		Page<News> newsPage = usersService.getNewsTitlesByCateId(cname, pageNumber, Constants.pageSize);
+		Page<News> newsPage = usersService.getNewsByCateId(cname, pageNumber, Constants.pageSize);
 		
 		mv.addObject("newsPage",newsPage);
 		mv.addObject("pageNumber", pageNumber);

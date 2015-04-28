@@ -27,6 +27,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="content-body">
 				<form id="searchForm" class="form-inline" role="form" method="post">
 					<input type="hidden" name="pageNumber" value="${newsPage.pageNumber}" />
+					<input type="hidden" name="cname" value="${newsPage.pageNumber}" />
 					<button class="btn btn-primary" type="button" onclick="spiderNews('all');">一键全部抓取</button><br/><br/>
 					<button type="button" class="btn btn-info" onclick="spiderNews('ycwb');">抓取羊城晚报</button>		
 					<button type="button" class="btn btn-info" onclick="spiderNews('history');">抓取历史新闻</button>			
@@ -41,11 +42,10 @@
 						<thead>
 							<tr>
 								<th>标题</th>
-								<!-- <th>内容</th> -->
 								<th>时间</th>
 								<th>作者</th>
 								<th>编辑</th>
-							<!-- 	<th>栏目</th> -->
+								<th>栏目</th>
 								
 								
 							</tr>
@@ -123,18 +123,17 @@
 	<script>
 	
 	function spiderNews(type) {
-/* 		$('#myModal').load("${appName}/admin/news-add-show.do",function(){
-			$('#myModal').modal('show');
-		}); */
-		
   		$.ajax({
 	        url:"${appName}/spider/news-" + type +".do",  
 	        type:"POST",
 		    contentType : "application/json",
 		    dataType : "json",
 	        success:function(data){
-	        	/* alert("本次抓取" + data.total + "条新闻");
-        		$(".reload-button").attr("onclick","javascript:window.location.reload();"); */
+	        	var data = data.model;
+	        	
+	        	alert("本次抓取" + data.total + "条新闻");
+	        	
+        		$(".reload-button").attr("onclick","javascript:window.location.reload();");
 	        },
 	        error:function(e){
 	        }

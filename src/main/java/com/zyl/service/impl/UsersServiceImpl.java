@@ -46,10 +46,10 @@ public class UsersServiceImpl implements UsersService {
 	 * ================================== 分页获取操作
 	 */
 	
-	public Page<News> getNewsTitlesByCateId(String cname, Integer pageNumber, Integer pageSize) {
+	public Page<News> getNewsByCateId(String cname, Integer pageNumber, Integer pageSize) {
 		int skip = pageSize * (pageNumber - 1);
 		
-		List<News> newsList = newsDao.getNewsTitlesByCateName(cname, skip, pageSize);
+		List<News> newsList = newsDao.getNewsByCateName(cname, skip, pageSize);
 		long count = newsDao.getNewsCountByCateName(cname);
 		
 		Page<News> newsPage = new Page<News>();

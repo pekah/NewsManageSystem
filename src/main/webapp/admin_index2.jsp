@@ -161,14 +161,6 @@
 			$(this).val("");
 		});
 	}
-	
-	function gotoPage(){
-    	var pageNumber=$("#goto").val();
-    	if(pageNumber==""){
-    		pageNumber=1;
-    	}
-    	window.location.href='${appName}/keywords/sentencesSet-list?pageNumber='+pageNumber;
-    }
 	</script>
 </body>
 </html>

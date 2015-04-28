@@ -3,6 +3,8 @@ package com.zyl.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,7 +50,8 @@ public class AdminController {
 	}	
 	
 	@RequestMapping("news-spider-index")
-	public ModelAndView forwardSpider(){
+	public ModelAndView forwardSpider(HttpSession session, String cname, Integer pageNumber){
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/spider-index.jsp");
 		return mv;

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zyl.bean.News;
@@ -23,6 +24,7 @@ public class SpiderController {
 	
 	//抓取太极拳视频
 	@RequestMapping("news-taijiquan")
+	@ResponseBody
 	public ModelAndView addTaijiquan(Integer pageNumber){
 		if(pageNumber == null){
 			pageNumber = 1;
@@ -33,19 +35,22 @@ public class SpiderController {
 		
 		int total = 0;
 		
-//		for(int i = 1; i <= FATCHPAGE; i++){
-//			System.out.println("第" + i + "页");
-//			taijiquanUrl = taijiquanUrl + "_page_" + i;
-//			total += spiderSerive.addYoukuVideo(taijiquanUrl,"太极拳");
-//		}
 		
-		Page<News> newsPage = userSerivce.getNewsTitlesByCateId("太极拳", pageNumber, Constants.pageSize);
+		//有问题。应该先把所有url都拿到后再插入数据库
+		for(int i = 1; i <= FATCHPAGE; i++){
+			System.out.println("第" + i + "页");
+			taijiquanUrl = taijiquanUrl + "_page_" + i;
+			total += spiderSerive.addYoukuVideo(taijiquanUrl,"太极拳");
+		}
+		
+		
+		Page<News> newsPage = userSerivce.getNewsByCateId("太极拳", pageNumber, Constants.pageSize);
 		
 		mv.addObject("total",total);
 		mv.addObject("newsPage", newsPage);
 		mv.addObject("pageNumber", pageNumber);
 		
-		mv.setViewName("admin/spider-index.jsp");
+		mv.setViewName("json");
 		
 		return mv;
 	}
