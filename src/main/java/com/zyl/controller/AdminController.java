@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.zyl.bean.Category;
 import com.zyl.bean.News;
+import com.zyl.bean.Users;
 import com.zyl.service.AdminService;
 import com.zyl.service.UsersService;
 
@@ -205,14 +206,67 @@ public class AdminController {
 		return mv;
 	}	
 
-	@RequestMapping("addUsers")
-	public ModelAndView addUsers(String username,String password) throws Exception
+	@RequestMapping("users-add-show")
+	public ModelAndView addUsersShow(String username,String password) throws Exception
 	{
-		String username1 = new String(username.getBytes("ISO-8859-1"),"gbk");
 		ModelAndView mv = new ModelAndView();
-		adminService.addUsers(username1, password);
-		mv.setViewName("admin_index.jsp");
+		mv.setViewName("admin/users-add-show.jsp");
 		return mv;
 	}
 	
+	@RequestMapping("users-del-show")
+	public ModelAndView delUsersShow(String uname)
+	{
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("uname", uname);
+		mv.setViewName("admin/users-del-show.jsp");
+		return mv;
+	}	
+	
+	@RequestMapping("users-del-operate")
+	public ModelAndView delUsers(String uname)
+	{
+		ModelAndView mv = new ModelAndView();
+		adminService.removeUsers(uname);
+		mv.setViewName("json");
+		mv.addObject("status","success");
+		
+		return mv;
+	}	
+	
+	@RequestMapping("users-add-operate")
+	public ModelAndView addUsers(String username, String password) throws Exception
+	{
+		ModelAndView mv = new ModelAndView();		
+		adminService.addUsers(username, password);
+		mv.addObject("status","success");
+		mv.setViewName("json");
+		return mv;
+	}
+	
+	@RequestMapping("news-listAllUsers")
+	public ModelAndView listAllUsers(String keyword, Integer pageNumber) throws UnsupportedEncodingException{
+		if(pageNumber == null){
+			pageNumber = 1;
+		}
+		
+		if (keyword == null || keyword.length() <= 0) {
+		    keyword = "";
+		}
+		
+		String kw = new String(keyword.getBytes("ISO-8859-1"),"UTF-8");
+		
+		ModelAndView mv = new ModelAndView();
+		
+		Page<Users> usersPage = userSerivce.listAllUsers(kw, pageNumber, Constants.pageSize);
+		
+		mv.addObject("usersPage", usersPage);
+		mv.addObject("keyword", kw);
+		mv.addObject("pageNumber", pageNumber);
+		
+		mv.setViewName("admin/users-list.jsp");
+		
+		return mv;
+	}
+
 }

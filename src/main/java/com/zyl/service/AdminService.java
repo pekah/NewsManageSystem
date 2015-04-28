@@ -16,5 +16,6 @@ public interface AdminService {
 	public void adddNewsByRedis(String title,String author,String editor,String category,String content);
 	public void removeNews(String title);
 	public void addUsers(String username,String password);
+	public void removeUsers(String username);
 	public void removeNewsById(ObjectId nid);
 }

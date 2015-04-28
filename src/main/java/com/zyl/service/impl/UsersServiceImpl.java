@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.zyl.bean.News;
+import com.zyl.bean.Users;
 import com.zyl.controller.Page;
 import com.zyl.dao.CategoryDao;
 import com.zyl.dao.NewsDao;
@@ -39,19 +40,8 @@ public class UsersServiceImpl implements UsersService {
 		String message = usersDao.addUsers(username, password);
 		return message;
 	}
+	
 
-	public void deleteUsers(String username) {
-		// TODO Auto-generated method stub
-		
-	}
-	public int searchUIDByUName(String username) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	public void updateUsers(String username, String password) {
-		// TODO Auto-generated method stub
-		
-	}
 	/**
 	 * ================================== 分页获取操作
 	 */
@@ -105,6 +95,24 @@ public class UsersServiceImpl implements UsersService {
 		newsPage.setPageList(newsList);
 		
 		return newsPage;		
+	}
+	
+	public Page<Users> listAllUsers(String keyword, Integer pageNumber, Integer pageSize) {
+		int skip = pageSize * (pageNumber - 1);
+		
+		Map<String, Object> searchResult = usersDao.listAllUsers(keyword, skip, pageSize);
+		@SuppressWarnings("unchecked")
+		List<Users> usersList = (List<Users>) searchResult.get("usersList");
+		long count = Long.parseLong(searchResult.get("count").toString());
+		
+		Page<Users> usersPage = new Page<Users>();
+		usersPage.setPageNumber(pageNumber);
+		usersPage.setPageSize(pageSize);
+		usersPage.setTotalPage(count % pageSize == 0 ? (count / pageSize) : (count / pageSize + 1)); 
+		usersPage.setTotalRow(count);
+		usersPage.setPageList(usersList);
+		
+		return usersPage;	
 	}
 
 	

@@ -77,6 +77,11 @@ public class AdminServiceImpl implements AdminService {
 			
 	}
 	
+	public void removeUsers(String username) {
+		usersDao.removeUsers(username);
+		
+	}
+	
 	public void removeNews(String title) {
 		newsDao.removeNews(title);
 	}

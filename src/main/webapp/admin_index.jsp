@@ -189,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      
      <!-- 添加用户版块开始 -->
      <div id="addUsers">
-     	<form role="form" method="post" action="addUsers.do">
+     	<form role="form" method="post" action="admin/users-add-operate.do">
 	     	<span class="label label-success">用户名</span>
 	     	<input type="text" class="form-control" name="username" placeholder="请输入用户名"/>
 	     	<span class="label label-success">密码</span>
