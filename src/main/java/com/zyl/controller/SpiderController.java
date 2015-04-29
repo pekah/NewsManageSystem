@@ -1,5 +1,7 @@
 package com.zyl.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -25,32 +27,27 @@ public class SpiderController {
 	//抓取太极拳视频
 	@RequestMapping("news-taijiquan")
 	@ResponseBody
-	public ModelAndView addTaijiquan(Integer pageNumber){
-		if(pageNumber == null){
-			pageNumber = 1;
-		}
-		
+	public ModelAndView addTaijiquan(){
 		ModelAndView mv = new ModelAndView();
 		String taijiquanUrl = "http://www.soku.com/search_video/q_%E5%A4%AA%E6%9E%81%E6%8B%B3_orderby_2";
 		
 		int total = 0;
 		
-		
-		//有问题。应该先把所有url都拿到后再插入数据库
 		for(int i = 1; i <= FATCHPAGE; i++){
-			System.out.println("第" + i + "页");
 			taijiquanUrl = taijiquanUrl + "_page_" + i;
 			total += spiderSerive.addYoukuVideo(taijiquanUrl,"太极拳");
 		}
 		
+		List<News> newsList = null;
+		if(total > 0){
+			newsList = userSerivce.getLatestNewsByCateName("太极拳", total);
+		}
 		
-		Page<News> newsPage = userSerivce.getNewsByCateId("太极拳", pageNumber, Constants.pageSize);
-		
+		mv.addObject("cname","太极拳");
 		mv.addObject("total",total);
-		mv.addObject("newsPage", newsPage);
-		mv.addObject("pageNumber", pageNumber);
+		mv.addObject("newsList", newsList);
 		
-		mv.setViewName("json");
+		mv.setViewName("admin/spider-index.jsp");
 		
 		return mv;
 	}
@@ -58,36 +55,64 @@ public class SpiderController {
 	//抓取广场舞视频
 	@RequestMapping("news-squareDance")
 	public ModelAndView addSquareDance(){
+		ModelAndView mv = new ModelAndView();
 		String squareDanceUrl = "http://www.soku.com/search_video/q_%E5%B9%BF%E5%9C%BA%E8%88%9E_orderby_2";
 		
+		int total = 0;
+		
 		for(int i = 1; i <= FATCHPAGE; i++){
-			System.out.println("第" + i + "页");
 			squareDanceUrl = squareDanceUrl + "_page_" + i;
-			spiderSerive.addYoukuVideo(squareDanceUrl,"广场舞");
+			total += spiderSerive.addYoukuVideo(squareDanceUrl,"广场舞");
 		}
 		
-		return null;
+		List<News> newsList = null;
+		if(total > 0){
+			newsList = userSerivce.getLatestNewsByCateName("广场舞", total);
+		}
+		
+		mv.addObject("cname","广场舞");
+		mv.addObject("total",total);
+		mv.addObject("newsList", newsList);
+		
+		mv.setViewName("admin/spider-index.jsp");
+		
+		return mv;	
 	}	
 	
 	//抓取流言百科的新闻
 	@RequestMapping("news-rumour")
 	public ModelAndView addRumour(){
+		ModelAndView mv = new ModelAndView();
 		String url = "http://www.liuyanbaike.com/category/";
 		
+		int total = 0;
+		
 		for(int i = 1; i <= FATCHPAGE; i++){
-			System.out.println("第" + i + "页");
 			url = url + "?page=" + i;
-			
-			spiderSerive.addRumour(url,"流言百科");
+			total += spiderSerive.addRumour(url,"流言百科");
 		}
 		
-		return null;
+		List<News> newsList = null;
+		if(total > 0){
+			newsList = userSerivce.getLatestNewsByCateName("流言百科", total);
+		}
+		
+		mv.addObject("cname","流言百科");
+		mv.addObject("total",total);
+		mv.addObject("newsList", newsList);
+		
+		mv.setViewName("admin/spider-index.jsp");
+		
+		return mv;	
 	}		
 	
 	//抓取羊城晚报的新闻
 	@RequestMapping("news-ycwb")
 	public ModelAndView addYCWB(){
+		ModelAndView mv = new ModelAndView();
 		String url = "http://news.ycwb.com/n_bd_gz";
+		
+		int total = 0;
 		
 		for(int i = 1; i <= FATCHPAGE; i++){
 			System.out.println("第" + i + "页");
@@ -98,30 +123,70 @@ public class SpiderController {
 				url = url + "_" + i + ".htm";
 			}
 			
-			spiderSerive.addYCWB(url, "羊城晚报");
+			total += spiderSerive.addYCWB(url, "羊城晚报");
 		}
 		
-		return null;
+		List<News> newsList = null;
+		if(total > 0){
+			newsList = userSerivce.getLatestNewsByCateName("羊城晚报", total);
+		}
+		
+		mv.addObject("cname","羊城晚报");
+		mv.addObject("total",total);
+		mv.addObject("newsList", newsList);
+		
+		mv.setViewName("admin/spider-index.jsp");
+		
+		return mv;	
+		
 	}
 	
 	//抓取国际新闻
 	@RequestMapping("news-nation")
 	public ModelAndView addNation(){
+		ModelAndView mv = new ModelAndView();
 		String url = "http://www.chinanews.com/world.shtml";
-			
-		spiderSerive.addNation(url, "国际热点");
 		
-		return null;
+		int total = 0;
+		
+		total += spiderSerive.addNation(url, "国际热点");
+		
+		List<News> newsList = null;
+		if(total > 0){
+			newsList = userSerivce.getLatestNewsByCateName("国际热点", total);
+		}
+		
+		mv.addObject("cname","国际热点");
+		mv.addObject("total",total);
+		mv.addObject("newsList", newsList);
+		
+		mv.setViewName("admin/spider-index.jsp");
+		
+		return mv;	
 	}	
 	
 	//抓取历史新闻
 	@RequestMapping("news-history")
 	public ModelAndView addZhihuRecommend(){
+		ModelAndView mv = new ModelAndView();
 		String url = "http://view.news.qq.com/l/history_new/history_article/list201206115621.htm";
-			
-		spiderSerive.addHistory(url, "历史新闻");
 		
-		return null;
+		int total = 0;
+		
+		total += spiderSerive.addHistory(url, "历史新闻");
+		
+		List<News> newsList = null;
+		if(total > 0){
+			newsList = userSerivce.getLatestNewsByCateName("历史新闻", total);
+		}
+		
+		mv.addObject("cname","历史新闻");
+		mv.addObject("total",total);
+		mv.addObject("newsList", newsList);
+		
+		mv.setViewName("admin/spider-index.jsp");
+		
+		return mv;	
 	}	
 	
 	

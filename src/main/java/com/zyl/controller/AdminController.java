@@ -226,6 +226,24 @@ public class AdminController {
 		return mv;
 	}	
 	
+	@RequestMapping("users-modify-show")
+	public ModelAndView modifyUsersShow(String uname)
+	{
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("uname", uname);
+		mv.setViewName("admin/users-modify-show.jsp");
+		return mv;
+	}	
+	
+	@RequestMapping("users-modify-operate")
+	public ModelAndView modifyUsers(String uname, String password)
+	{
+		ModelAndView mv = new ModelAndView();
+		adminService.modifyUser(uname, password);
+		mv.setViewName("json");
+		return mv;
+	}	
+	
 	@RequestMapping("users-del-operate")
 	public ModelAndView delUsers(String uname)
 	{

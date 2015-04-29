@@ -97,6 +97,10 @@ public class AdminServiceImpl implements AdminService {
 		// TODO Auto-generated method stub
 		usersDao.addUsers(username, password);
 	}
+	//修改用户
+	public void modifyUser(String username, String password) {
+		usersDao.modifyUser(username, password);
+	}
 
 
 }

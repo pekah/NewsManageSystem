@@ -12,10 +12,14 @@ public interface AdminService {
 	public ObjectId getCIdByCName(String cname);
 	public void removeCategory(String name);
 	public List<Category> getCategorys();
+	
 	public void addNews(News news, String category);
 	public void adddNewsByRedis(String title,String author,String editor,String category,String content);
 	public void removeNews(String title);
+	public void removeNewsById(ObjectId nid);
+	
 	public void addUsers(String username,String password);
 	public void removeUsers(String username);
-	public void removeNewsById(ObjectId nid);
+	public void modifyUser(String username, String password);
+	
 }

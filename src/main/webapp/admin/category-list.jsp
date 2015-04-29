@@ -47,10 +47,6 @@
 												onclick="toDeleteCategory('${category.cname}')"
 												type="button" class="btn btn-danger" data-toggle="dropdown"
 												style="margin-right: 10px;">删除</button>
-											<button
-												onclick="toModifyCategory('${category.cname}')"
-												type="button" class="btn btn-primary" data-toggle="dropdown"
-												style="margin-right: 10px;">修改</button>
 										</div>									
 									</td>
 								</tr>
@@ -72,16 +68,6 @@
 		});
 	}
 
-	function toModifyCategory(cname) {
-		$('#myModal')
-				.load(
-						"${appName}/admin/new-modify-show",
-						function() {
-							$("input[name='accountId']").val(id);
-							$('#myModal').modal('show');
-						});
-	}
-	
 	function addCategory() {
 		$('#myModal').load("${appName}/admin/category-add-show.do",function(){
 			$('#myModal').modal('show');

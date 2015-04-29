@@ -12,6 +12,7 @@ import com.zyl.dao.CategoryDao;
 import com.zyl.dao.NewsDao;
 import com.zyl.dao.SpiderDao;
 import com.zyl.service.SpiderService;
+import com.zyl.util.NewsUtil;
 import com.zyl.util.Spider;
 import com.zyl.util.TimeUtil;
 
@@ -28,8 +29,8 @@ public class SpiderServiceImpl implements SpiderService {
 	public int addYoukuVideo(String url, String categoryName) {
 		//抓取新闻数
 		int total = 0;
+		NewsUtil newsUtil = new NewsUtil();
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
-		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
 		
 		//获得优酷视频（太极拳+广场舞）的标题
@@ -61,9 +62,10 @@ public class SpiderServiceImpl implements SpiderService {
 		while(titleIsFind && urlIsFind && authorIsFind && timeIsFind){
 			news = new News();
 			String title = titleMa.group(1);
-			//如果待插入的新闻标题和数据库已存在的最新新闻标题一致，跳出循环
-			if(title.equals(latestNewsTitle))
+			//如果待插入的新闻标题在数据库已存在，跳出循环
+			if(newsUtil.newsIsExist(cateId, title)){
 				break;
+			}
 			
 			String _url = urlMa.group(1);
 			String author = authorMa.group(1);

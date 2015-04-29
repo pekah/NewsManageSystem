@@ -25,15 +25,16 @@
 			<!-- 左边菜单栏 -->
 			<%@ include file="/commons/left.jsp"%>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="content-body">
-				<form id="searchForm" class="form-inline" role="form" method="post">
-					<input type="hidden" name="pageNumber" value="${newsPage.pageNumber}" />
-					<input type="hidden" name="cname" value="${newsPage.pageNumber}" />
-					<button class="btn btn-primary" type="button" onclick="spiderNews('all');">一键全部抓取</button><br/><br/>
-					<button type="button" class="btn btn-info" onclick="spiderNews('ycwb');">抓取羊城晚报</button>		
+				<form id="searchForm" name="searchForm" class="form-inline" role="form" method="post" action="">
+					<input type="hidden" name="cname" value="${cname}" />
+					<button class="btn btn-primary" type="button" onclick="spiderNews('all');">一键全部抓取</button>
+					<h1>本次一共抓取${total }条新闻</h1>
+					<br/><br/>
+					<button type="button" class="btn btn-info" onclick="formSubmit('ycwb');">抓取羊城晚报</button>		
 					<button type="button" class="btn btn-info" onclick="spiderNews('history');">抓取历史新闻</button>			
 					<button type="button" class="btn btn-info" onclick="spiderNews('rumour');">抓取流言百科</button>			
-					<button type="button" class="btn btn-info" onclick="spiderNews('squareDance');">抓取广场舞</button>			
-					<button type="button" class="btn btn-info" onclick="spiderNews('taijiquan');">抓取太极拳</button>			
+					<button type="button" class="btn btn-info" onclick="formSubmit('squareDance');">抓取广场舞</button>			
+					<button type="button" class="btn btn-info" onclick="formSubmit('taijiquan');">抓取太极拳</button>			
 					<button type="button" class="btn btn-info" onclick="spiderNews('nation');">抓取国际热点</button>		
 				</form>
 				
@@ -46,12 +47,10 @@
 								<th>作者</th>
 								<th>编辑</th>
 								<th>栏目</th>
-								
-								
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="news" items="${newsPage.pageList}">
+							<c:forEach var="news" items="${newsList}">
 								<tr>
 								
 									<td>${news.ntitle}</td>
@@ -59,6 +58,7 @@
 									<td>${news.ntime}</td>
 									<td>${news.nauthor}</td>
 									<td>${news.neditor}</td>
+									<td>${cname }</td>
 									<td>
 										<div class="btn-group">
 											<button
@@ -77,43 +77,6 @@
 					</table>
 				</div>
 				
-				
-				<!-- 分页div -->				 
-				<div class="col-xs-6">
-					<div class="dataTables_info" id="example2_info">总共
-						${newsPage.totalRow} 记录</div>
-				</div>
-				<div class="col-xs-6">
-					<div class="dataTables_paginate paging_bootstrap">
-						<ul class="pagination">
-							<c:if test="${newsPage.totalPage>0 }">
-								<li class="prev" onclick="formSubmit('1','false')"><a>首页</a></li>
-								<li
-									class="prev <c:if test="${newsPage.pageNumber <=1}">disabled</c:if>"><a
-									<c:if test="${newsPage.pageNumber > 1}">onclick="formSubmit('${newsPage.pageNumber-1}','false')";</c:if>>←
-										上一页</a></li>
-							</c:if>
-							<c:forEach begin="1" end="${newsPage.totalPage}"
-								var="pageNumber">
-								<c:if
-									test="${pageNumber+3>newsPage.pageNumber&&pageNumber-3<newsPage.pageNumber}">
-									<li
-										<c:if test="${pageNumber == newsPage.pageNumber}">class="active"</c:if>>
-										<a onclick="formSubmit('${pageNumber}','false');">${pageNumber}</a>
-									</li>
-								</c:if>
-							</c:forEach>
-							<c:if test="${newsPage.totalPage>0 }">
-								<li
-									class="next <c:if test="${newsPage.pageNumber == newsPage.totalPage}">disabled</c:if>"><a
-									<c:if test="${newsPage.pageNumber < newsPage.totalPage}">onclick="formSubmit('${newsPage.pageNumber+1}','false');"</c:if>>下一页
-										→ </a></li>
-								<li class="next"
-									onclick="formSubmit('${newsPage.totalPage}','false')"><a>尾页</a></li>
-							</c:if>
-						</ul>
-					</div>
-				</div> 			
 			</div>
 		</div>
 	</div>
@@ -140,29 +103,11 @@
 		});
 	}
 	
-	function formSubmit(pageNumber,flag){
+	function formSubmit(type){
 		var form=$("#searchForm");
-		if(flag=='true'){
-			resetForm();
-		}
-		$("input[type='hidden'][name='pageNumber']").val(pageNumber);
+		form.attr("action", "${appName}/spider/news-" + type + ".do");
 		$(form).submit();
 	}
-	function resetForm(btn){
-		var form=$("#searchForm");
-		form[0].reset();
-		$(form).find("select,input").each(function(){
-			$(this).val("");
-		});
-	}
-	
-	function gotoPage(){
-    	var pageNumber=$("#goto").val();
-    	if(pageNumber==""){
-    		pageNumber=1;
-    	}
-    	window.location.href='${appName}/keywords/sentencesSet-list?pageNumber='+pageNumber;
-    }
 	</script>
 </body>
 </html>

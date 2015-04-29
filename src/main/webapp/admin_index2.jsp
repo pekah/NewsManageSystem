@@ -30,7 +30,7 @@
 					<button class="btn btn-primary" type="button" onclick="addNews();">添加新闻</button>
 					<br><br>
 					<div class="form-group">
-						<input type="text" name="keyword" class="form-control" placeholder="标题或内容" value="${keyword}">
+						<input type="text" name="keyword" class="form-control" placeholder="标题" value="${keyword}">
 					</div>	
 					
 					<button type="button" class="btn btn-danger"

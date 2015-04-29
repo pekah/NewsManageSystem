@@ -221,6 +221,55 @@ public class NewsDaoImpl implements NewsDao {
 		
 		return searchResult;
 	}
+	
+	//获取栏目最新的N条新闻
+	public List<News> getLatestNewsByCateName(String cname, int total) {
+		
+		List<News> newsList = new ArrayList<News>();
+		
+		//通过栏目名获取栏目id
+		obtainCollByName("category");
+		BasicDBObject cateQuery = new BasicDBObject("CName",cname);
+		DBObject category = coll.findOne(cateQuery);
+		ObjectId cateId = (ObjectId) category.get("_id");
+		
+		//通过栏目id获取新闻对象
+		obtainCollByName("news");
+		BasicDBObject newsQuery = new BasicDBObject("CID",cateId);
+		BasicDBObject sortBy = new BasicDBObject("NTime", -1);
+		
+		DBCursor cursor = coll.find(newsQuery).sort(sortBy).limit(total);
+		
+		try {
+			while(cursor.hasNext()){
+				News news = new News();
+						
+				DBObject obj = cursor.next();
+				
+				news.setCategoryId(cateId);
+				news.setNid(obj.get("_id").toString());
+				news.setNauthor(obj.get("NAuthor").toString());
+				news.setNcontent(obj.get("NContent").toString());
+				news.setNeditor(obj.get("NEditor").toString());
+				
+				String dtStr = obj.get("NTime").toString();
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",Locale.US);
+				Date date = sdf.parse(dtStr);
+				
+				news.setNtime(date);
+				
+				news.setNtitle(obj.get("NTitle").toString());
+				
+				newsList.add(news);
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cursor.close();
+		}
+		
+		return newsList;		
+	}
 
 	public List<News> getNewsByCateName(String cname, int skip, int limit) {
 		

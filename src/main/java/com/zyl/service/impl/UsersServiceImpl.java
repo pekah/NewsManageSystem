@@ -62,6 +62,11 @@ public class UsersServiceImpl implements UsersService {
 		return newsPage;
 	}
 	
+	public List<News> getLatestNewsByCateName(String cname, int total) {
+		// TODO Auto-generated method stub
+		return newsDao.getLatestNewsByCateName(cname, total);
+	}
+	
 	public Page<News> searchNews(String keyword, Integer pageNumber, Integer pageSize) {
 		int skip = pageSize * (pageNumber - 1);
 		

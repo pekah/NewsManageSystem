@@ -98,8 +98,12 @@ public class UsersDaoImpl implements UsersDao {
 		coll.remove(usersQuery);
 		
 	}
-	public void updateUsers(String username, String password) {
-		// TODO Auto-generated method stub
+	public void modifyUser(String username, String password) {
+		obtainColl();
+		BasicDBObject usersQuery = new BasicDBObject("UName", username);
+		BasicDBObject usersUpdate = new BasicDBObject("UName", username).append("UPassword", password);
+		coll.update(usersQuery, usersUpdate);
+		
 		
 	}
 	public String searchUIDByUName(String username) {

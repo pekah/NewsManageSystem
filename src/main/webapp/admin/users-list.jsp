@@ -71,11 +71,6 @@
 				</div>
 				
 				
-				<!-- 分页div -->				 
-				<div class="col-xs-6">
-					<div class="dataTables_info" id="example2_info">总共
-						${usersPage.totalRow} 记录</div>
-				</div>
 				<div class="col-xs-6">
 					<div class="dataTables_paginate paging_bootstrap">
 						<ul class="pagination">
@@ -120,12 +115,12 @@
 		});
 	}
 
-	function toModifyUsers(uid) {
+	function toModifyUsers(uname) {
 		$('#myModal')
 				.load(
-						"${appName}/admin/users-modify-show",
+						"${appName}/admin/users-modify-show.do",{"uname":uname},
 						function() {
-							$("input[name='accountId']").val(id);
+							$("input[name='accountId']").val(uname);
 							$('#myModal').modal('show');
 						});
 	}
