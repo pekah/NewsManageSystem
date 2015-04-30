@@ -24,7 +24,7 @@
 		
 		<!-- cron表达式 -->
 		<property name="cronExpression">
-			<value>10,15,20,25,30,35,40,45,50,55 * * * * ?</value>
+			<value>*/5 * * * * ?</value>
 		</property>
 	</bean>	
 	
