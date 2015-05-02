@@ -76,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  </div><!--navbar-header-->
 		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav" id="navbarul"> 		
-		 	  <li class="active"><a href="javascript:void(0);">首页</a></li>
+		 	  <li><a href="specifyNewsList.do?cname=">首页</a></li>
 		 	  <c:forEach var="cate" items="${category }">
 		 	  		<li><a href="specifyNewsList.do?cname=${cate.cname}">${cate.cname }</a></li>
 		 	  </c:forEach>

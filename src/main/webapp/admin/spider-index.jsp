@@ -31,11 +31,11 @@
 					<h1>本次一共抓取${total }条新闻</h1>
 					<br/><br/>
 					<button type="button" class="btn btn-info" onclick="formSubmit('ycwb');">抓取羊城晚报</button>		
-					<button type="button" class="btn btn-info" onclick="spiderNews('history');">抓取历史新闻</button>			
-					<button type="button" class="btn btn-info" onclick="spiderNews('rumour');">抓取流言百科</button>			
+					<button type="button" class="btn btn-info" onclick="formSubmit('history');">抓取历史新闻</button>			
+					<button type="button" class="btn btn-info" onclick="formSubmit('rumour');">抓取流言百科</button>			
 					<button type="button" class="btn btn-info" onclick="formSubmit('squareDance');">抓取广场舞</button>			
 					<button type="button" class="btn btn-info" onclick="formSubmit('taijiquan');">抓取太极拳</button>			
-					<button type="button" class="btn btn-info" onclick="spiderNews('nation');">抓取国际热点</button>		
+					<button type="button" class="btn btn-info" onclick="formSubmit('nation');">抓取国际热点</button>		
 				</form>
 				
 				<div class="table-responsive">

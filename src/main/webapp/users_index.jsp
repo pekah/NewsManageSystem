@@ -23,11 +23,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    font-size: 12px;		
 		}
 		.row .col-md-6{ margin-bottom:20px; border-bottom:1px solid #CCCCCC;}
-		.row a{ font-size:20px;color:black; font-weight:bold; }
-		.row li a{font-size:18px; color:black;font-weight:normal;}
+		.row .col-md-6 ul li a{font-size:18px; color:black;font-weight:normal;}
 		.col4 {float:left;}
 		.col8 {float:right;}
 		.col8 a{cursor:pointer;}
+		.col-md-6 ul li:first-child{list-style-type:none;}
+		.col-md-6 ul li:first-child a{font-size:20px; color:black; font-weight: bold;  }
+		
 	</style>
 	<script>
 		$(document).ready(function()
@@ -151,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  </div><!--navbar-header-->
 		  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav" id="navbarul"> 		
-		 	  <li class="active"><a href="javascript:void(0);">首页</a></li>
+		 	  <li><a href="specifyNewsList.do?cname=">首页</a></li>
 		 	  <c:forEach var="cate" items="${category }">
 		 	  		<li><a href="specifyNewsList.do?cname=${cate.cname}">${cate.cname }</a></li>
 		 	  </c:forEach>
@@ -179,76 +181,61 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<ul id="catesul"></ul>
 	 </div>
 	<!--标题栏结束-->
+	
 	<!-- 新闻表格 -->
 	<div class="container">
+	<c:if test="${flag == 'index' }">
 		<div class="row">
 	  		<div class="col-md-6">
-	  			<ul>
-	  				<a href="#">联通联手西班牙电信入局大数据 数据安全成问题</a>
-	  				<li><a href="#">触控技术需求增大 指纹识别仍将与密码并存</a></li>
-	  				<li><a href="#">世界三大杀软测试机构：取消奇虎360所有认证</a></li>
-	  				<li><a href="#">广东广乐高速16车追尾 9车燃烧18人受伤</a></li>
-	  				<li><a href="#">美术基础教育困境：以前受政治约束，现在受功利绑架</a></li>
-	  				<li><a href="#">中石化一季度净利十年最低 中石油业绩八年最差</a></li>
+	  			<ul>		
+					<c:forEach var="news" items="${ycwb}">
+						<li><a href="viewNews.do?nid=${news.nid }">${news.ntitle}</a></li>
+					</c:forEach>
 	  			</ul>
 	  		</div>
 	  		<div class="col-md-6">
-				<ul>
-					<a href="#">中央向党组织涣散村选派第一书记 任期1至3年</a>
-					<li><a href="#">解放军仪仗队在俄彩排 高唱喀秋莎通过红场(图)</a></li>
-					<li><a href="#">环境维权困境：村民苦寻水泥厂与唐氏综合征的关系</a></li>
-					<li><a href="#">厦蓉高速江西境内发生三车追尾事故已致8人遇难</a></li>
-					<li><a href="#">黄金价格或再次探底 已接近5年最低点</a></li>
-					<li><a href="#">环境维权困境：村民苦寻水泥厂与唐氏综合征的关系</a></li>
-				</ul>
-			</div>
+	  			<ul>		
+					<c:forEach var="news" items="${history}">
+						<li><a href="viewNews.do?nid=${news.nid }">${news.ntitle}</a></li>
+					</c:forEach>
+	  			</ul>			
+	  		</div>
 		</div>
 		<div class="row">
 	  		<div class="col-md-6">
-	  			<ul>
-	  				<a href="#">联通联手西班牙电信入局大数据 数据安全成问题</a>
-	  				<li><a href="#">触控技术需求增大 指纹识别仍将与密码并存</a></li>
-	  				<li><a href="#">世界三大杀软测试机构：取消奇虎360所有认证</a></li>
-	  				<li><a href="#">广东广乐高速16车追尾 9车燃烧18人受伤</a></li>
-	  				<li><a href="#">美术基础教育困境：以前受政治约束，现在受功利绑架</a></li>
-	  				<li><a href="#">中石化一季度净利十年最低 中石油业绩八年最差</a></li>
-	  			</ul>
+	  			<ul>		
+					<c:forEach var="news" items="${taijiquan}">
+						<li><a href="viewNews.do?nid=${news.nid }">${news.ntitle}</a></li>
+					</c:forEach>
+	  			</ul>	
 	  		</div>
 	  		<div class="col-md-6">
-				<ul>
-					<a href="#">中央向党组织涣散村选派第一书记 任期1至3年</a>
-					<li><a href="#">解放军仪仗队在俄彩排 高唱喀秋莎通过红场(图)</a></li>
-					<li><a href="#">环境维权困境：村民苦寻水泥厂与唐氏综合征的关系</a></li>
-					<li><a href="#">厦蓉高速江西境内发生三车追尾事故已致8人遇难</a></li>
-					<li><a href="#">黄金价格或再次探底 已接近5年最低点</a></li>
-					<li><a href="#">环境维权困境：村民苦寻水泥厂与唐氏综合征的关系</a></li>
-				</ul>
-			</div>
+	  			<ul>		
+					<c:forEach var="news" items="${squareDance}">
+						<li><a href="viewNews.do?nid=${news.nid }">${news.ntitle}</a></li>
+					</c:forEach>
+	  			</ul>				
+	  		</div>
 		</div>
 		<div class="row">
 	  		<div class="col-md-6">
-	  			<ul>
-	  				<a href="#">联通联手西班牙电信入局大数据 数据安全成问题</a>
-	  				<li><a href="#">触控技术需求增大 指纹识别仍将与密码并存</a></li>
-	  				<li><a href="#">世界三大杀软测试机构：取消奇虎360所有认证</a></li>
-	  				<li><a href="#">广东广乐高速16车追尾 9车燃烧18人受伤</a></li>
-	  				<li><a href="#">美术基础教育困境：以前受政治约束，现在受功利绑架</a></li>
-	  				<li><a href="#">中石化一季度净利十年最低 中石油业绩八年最差</a></li>
-	  			</ul>
+	  			<ul>		
+					<c:forEach var="news" items="${rumour}">
+						<li><a href="viewNews.do?nid=${news.nid }">${news.ntitle}</a></li>
+					</c:forEach>
+	  			</ul>		
 	  		</div>
 	  		<div class="col-md-6">
-				<ul>
-					<a href="#">中央向党组织涣散村选派第一书记 任期1至3年</a>
-					<li><a href="#">解放军仪仗队在俄彩排 高唱喀秋莎通过红场(图)</a></li>
-					<li><a href="#">环境维权困境：村民苦寻水泥厂与唐氏综合征的关系</a></li>
-					<li><a href="#">厦蓉高速江西境内发生三车追尾事故已致8人遇难</a></li>
-					<li><a href="#">黄金价格或再次探底 已接近5年最低点</a></li>
-					<li><a href="#">环境维权困境：村民苦寻水泥厂与唐氏综合征的关系</a></li>
-				</ul>
+	  			<ul>		
+					<c:forEach var="news" items="${nation}">
+						<li><a href="viewNews.do?nid=${news.nid }">${news.ntitle}</a></li>
+					</c:forEach>
+	  			</ul>
 			</div>
 		</div>
-	</div>
+	</c:if>
 	<!-- 新闻表格结束 -->
+	</div>	
  	<!-- 分页div -->
  	<div class="container">
 		<div class="col4">

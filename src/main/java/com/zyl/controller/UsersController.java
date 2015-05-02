@@ -45,24 +45,39 @@ public class UsersController {
 	@RequestMapping("specifyNewsList")
 	public ModelAndView specifyNewsList(String cname, Integer pageNumber)
 	{
-		if(cname == null || "".equals(cname)){
-			cname = "羊城晚报";
-		}
+		ModelAndView mv = new ModelAndView();
 		
+		Page<News> newsPage = null;
 		
 		if(pageNumber == null){
 			pageNumber = 1;
 		}
-
-		ModelAndView mv = new ModelAndView();
+		
+		if(cname == null || "".equals(cname)){
+			mv.addObject("ycwb",usersService.getLatestNewsByCateName("羊城晚报", 10));
+			mv.addObject("history",usersService.getLatestNewsByCateName("历史新闻", 10));
+			mv.addObject("taijiquan",usersService.getLatestNewsByCateName("太极拳", 10));
+			mv.addObject("squareDance",usersService.getLatestNewsByCateName("广场舞", 10));
+			mv.addObject("rumour",usersService.getLatestNewsByCateName("流言百科", 10));
+			mv.addObject("nation",usersService.getLatestNewsByCateName("国际热点", 10));
+			
+			//标示当前是主页，user_index.jsp根据此标示来显示主页
+			mv.addObject("flag", "index");
+		}else{
+			try {
+				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			
+			newsPage = usersService.getNewsByCateId(cname, pageNumber, Constants.pageSize);
+		}
 		
 		mv.addObject("currentCName", cname);
 		
 		//获取所有栏目
 		List<Category> category = adminService.getCategorys();
 		mv.addObject("category",category);
-
-		Page<News> newsPage = usersService.getNewsByCateId(cname, pageNumber, Constants.pageSize);
 		
 		mv.addObject("newsPage",newsPage);
 		mv.addObject("pageNumber", pageNumber);
