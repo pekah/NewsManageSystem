@@ -64,11 +64,11 @@ public class UsersController {
 			//标示当前是主页，user_index.jsp根据此标示来显示主页
 			mv.addObject("flag", "index");
 		}else{
-			try {
-				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
+//			} catch (UnsupportedEncodingException e) {
+//				e.printStackTrace();
+//			}
 			
 			newsPage = usersService.getNewsByCateId(cname, pageNumber, Constants.pageSize);
 		}

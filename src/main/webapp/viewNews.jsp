@@ -31,6 +31,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         .label{font-size:15px; color:#336699; background:#C6D8D8;}
         
         .container p{font-size:18px;}
+        .container {width:1100px;}
+        #returntop {width:45px; position: absolute; display: none;}
+		#returntop img{float: left;}
+		#returntop #top{cursor: pointer;}
 	</style>
 	<script>
 		/* $(document).ready(function()
@@ -62,6 +66,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
+ 	<div id="returntop">
+  		<img id="top" src="img/top1.gif">
+  	</div>
 	<!--导航条开始-->
 	<nav class="navbar navbar-default" role="navigation" id="navigation">
 	  <div class="container">
@@ -118,6 +125,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<p>	
 			${data.news[1]}
 		</p>
+	  </div>
+	  <div class="container">
 		<form action="addReview.do" method="post">
 			<textarea class="form-control" name="content" style="width:100%; height: 134px;" rows="3" placeholder="请输入您的评论"></textarea>
 			<input type="hidden" name="nid" value="<%=request.getAttribute("nid") %>"/>
@@ -136,4 +145,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" charset="utf-8" src="js/umeditor.min.js"></script>
     <script type="text/javascript" src="js/lang/zh-cn/zh-cn.js"></script>
   </body>
+ <script>
+var returntop = document.getElementById("returntop");
+var returnw = returntop.clientWidth;
+var winw = document.documentElement.clientWidth;
+var returnleft = winw - returnw;
+returntop.style.left = returnleft - 80 + "px";
+returntop.style.top = 0 + "px";
+window.onscroll = function(){
+	var sh = document.documentElement.scrollTop+document.body.scrollTop;
+	if(sh < document.body.scrollHeight - 480){
+		returntop.style.top = sh + 450 + "px";
+	}
+	if(sh > 400){
+		returntop.style.display = "block";
+	}else{
+		returntop.style.display = "none";
+	}
+}
+
+var Top = document.getElementById("top");
+
+Top.onclick = function(){
+	var tobj = setInterval(function(){
+		var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+		var speed = Math.floor(-osTop / 20);
+		document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
+		if(osTop == 0){
+			clearInterval(tobj);
+		}
+	},1)
+	
+}
+</script>
 </html>
