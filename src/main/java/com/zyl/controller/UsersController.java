@@ -47,12 +47,6 @@ public class UsersController {
 	{
 		if(cname == null || "".equals(cname)){
 			cname = "羊城晚报";
-		}else{
-			try {
-				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
 		}
 		
 		
