@@ -77,6 +77,8 @@
 					</table>
 				</div>
 				
+				<div id="loadingIMG" style="display: none;z-index: 9999"><img src="../img/loading.gif" height='300'/></div>
+				
 			</div>
 		</div>
 	</div>
@@ -85,7 +87,7 @@
 		aria-labelledby="myModalLabel" aria-hidden="true"></div>
 	<script>
 	
-	function spiderNews(type) {
+/* 	function spiderNews(type) {
   		$.ajax({
 	        url:"${appName}/spider/news-" + type +".do",  
 	        type:"POST",
@@ -98,14 +100,21 @@
 	        	
         		$(".reload-button").attr("onclick","javascript:window.location.reload();");
 	        },
+            beforeSend:function(){
+                $('#loadingIMG').show();
+            },
+            complete:function(){
+                $('#loadingIMG').hide();
+            },
 	        error:function(e){
 	        }
 		});
-	}
+	} */
 	
 	function formSubmit(type){
 		var form=$("#searchForm");
 		form.attr("action", "${appName}/spider/news-" + type + ".do");
+		$('#loadingIMG').show();
 		$(form).submit();
 	}
 	</script>
