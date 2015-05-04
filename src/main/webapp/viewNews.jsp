@@ -36,33 +36,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		#returntop img{float: left;}
 		#returntop #top{cursor: pointer;}
 	</style>
-	<script>
-		/* $(document).ready(function()
-		{
-				$.ajax({
-				    url : "getCategorys.do",
-				    type : "POST",
-				    contentType : "application/json",
-				    dataType : "json",
-				    //data:JSON.stringify(dataValue),
-				    success : function(data) {
-				        var datas;
-				   		for(var i in data)
-				   		{
-				   			datas = data[i];
-				   		}
-				    	for(var i in datas)
-				    	{ 
-				    		$("#navbarul").append("<li><a href='javascript:void(0)'\">" + datas[i] +"</a></li>");
-				    	}
-					},
-				    error : function(data) {
-				       
-				    }
-				});				
-		}); */
-		
-	</script>
   </head>
   
   <body>

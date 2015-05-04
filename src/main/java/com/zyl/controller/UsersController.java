@@ -64,11 +64,11 @@ public class UsersController {
 			//标示当前是主页，user_index.jsp根据此标示来显示主页
 			mv.addObject("flag", "index");
 		}else{
-//			try {
-//				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
-//			} catch (UnsupportedEncodingException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				cname = new String(cname.getBytes("ISO-8859-1"),"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 			
 			newsPage = usersService.getNewsByCateId(cname, pageNumber, Constants.pageSize);
 		}
@@ -143,7 +143,7 @@ public class UsersController {
 	@RequestMapping("addReview")
 	public ModelAndView addReview(HttpServletRequest req,HttpSession session,String nid,String content) throws Exception
 	{
-		String reviewContent = new String(content.getBytes("ISO-8859-1"),"gbk");
+		String reviewContent = new String(content.getBytes("ISO-8859-1"),"UTF-8");
 		String uname = (String) session.getAttribute("name");
 		usersService.addReview(nid, uname, reviewContent);
 		

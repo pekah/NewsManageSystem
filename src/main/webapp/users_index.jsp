@@ -189,10 +189,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>	
  	<!-- 分页div -->
  	<div class="container_2">
+ 		<c:if test="${flag != 'index' }">
 		<div class="col4">
 			<div class="dataTables_info" id="example2_info">总共
 				${newsPage.totalRow} 记录</div>
 		</div>
+		</c:if>
 		<div class="col8">
 			<div class="dataTables_paginate paging_bootstrap">
 				<ul class="pagination">

@@ -1,19 +1,27 @@
 package test;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.pattern.PatternParser;
 
 public class TestMain {
 	public static void main(String[] args) {
-		String str = "1993-02-01 11:11:11";
-		if(str.endsWith("前")){
+		String patternStr = "/id_(.+?).html";
+		String targetStr = "http://v.youku.com/v_show/id_XOTM2MzM1MDEy.html?from=s1.8-1-1.2";
+		
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(targetStr);
+		
+		boolean isFind = matcher.find();
+		
+		if(isFind){
+			String result = matcher.group(1);
 			
-			String regex = "(.+?)小";
+			result = "<embed src=\"http://player.youku.com/player.php/sid/" + result + "/v.swf\" allowFullScreen=\"true\" quality=\"high\" width=\"480\" height=\"400\" align=\"middle\" allowScriptAccess=\"always\" type=\"application/x-shockwave-flash\"></embed>";
 			
-			str = str.replace("小时前", "");
-			
-			System.out.println(str);
+			System.out.println(result);
 		}
+		
 	}
 }

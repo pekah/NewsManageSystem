@@ -17,7 +17,7 @@ public interface UsersService {
 	//获得指定栏目最新的N条数据
 	public List<News> getLatestNewsByCateName(String cname, int total);
 	//通过新闻id查看某条新闻
-	public Map getNewsByNID(ObjectId nid);
+	public Map<String, Object> getNewsByNID(ObjectId nid);
 	//查看所有新闻
 	public Page<News> listAllNews(String keyword, Integer pageNumber, Integer pageSize);
 	//查看所有用户
