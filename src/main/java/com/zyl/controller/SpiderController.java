@@ -27,7 +27,7 @@ public class SpiderController {
 	private static String TAIJIQUAN = "http://www.soku.com/search_video/q_%E5%A4%AA%E6%9E%81%E6%8B%B3_orderby_2";
 	private static String SQUAREDANCE = "http://www.soku.com/search_video/q_%E5%B9%BF%E5%9C%BA%E8%88%9E_orderby_2";
 	private static String RUMOUR = "http://www.liuyanbaike.com/category/";
-	private static String YCWB = "http://news.ycwb.com/n_bd_gz.html";
+	private static String YCWB = "http://news.ycwb.com/n_bd_gz";
 	private static String NATION = "http://www.chinanews.com/world.shtml";
 	private static String HISTORY = "http://view.news.qq.com/l/history_new/history_article/list201206115621.htm";
 	
@@ -116,8 +116,6 @@ public class SpiderController {
 		int total = 0;
 		
 		for(int i = 1; i <= FATCHPAGE; i++){
-			System.out.println("第" + i + "页");
-			
 			if(i == 1){
 				YCWB = YCWB + ".htm";
 			}else{
