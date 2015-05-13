@@ -188,15 +188,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- 新闻表格结束 -->
 	</div>	
  	<!-- 分页div -->
-<<<<<<< HEAD
- 	<div class="container">
- 		<c:if test="${flag != 'index' }">
-	 		<div class="col4">
-				<div class="dataTables_info" id="example2_info">总共
-					${newsPage.totalRow} 记录</div>
-			</div>		
- 		</c:if>
-=======
  	<div class="container_2">
  		<c:if test="${flag != 'index' }">
 		<div class="col4">
@@ -204,7 +195,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				${newsPage.totalRow} 记录</div>
 		</div>
 		</c:if>
->>>>>>> e11365c2f16ee1ee015793a0d4eb65602a4c4fe6
 		<div class="col8">
 			<div class="dataTables_paginate paging_bootstrap">
 				<ul class="pagination">
