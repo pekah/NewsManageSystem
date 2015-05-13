@@ -68,11 +68,24 @@ public class SpiderServiceImpl implements SpiderService {
 			}
 			
 			String _url = urlMa.group(1);
+			
 			String author = authorMa.group(1);
 			String time = timeMa.group(1);
 			
 			news.setNtitle(title);
 			news.setUrl(_url);
+
+			Pattern pattern = Pattern.compile("/id_(.+?).html");
+			Matcher matcher = pattern.matcher(_url);
+			
+			boolean isFind = matcher.find();
+			
+			if(isFind){
+				String result = matcher.group(1);
+				
+				_url = "<embed src=\"http://player.youku.com/player.php/sid/" + result + "/v.swf\" allowFullScreen=\"true\" quality=\"high\" width=\"480\" height=\"400\" align=\"middle\" allowScriptAccess=\"always\" type=\"application/x-shockwave-flash\"></embed>";
+			}
+
 			news.setNcontent(_url);
 			news.setNauthor(author);
 			news.setNeditor(author);//编辑和作者是同一个人
@@ -96,9 +109,10 @@ public class SpiderServiceImpl implements SpiderService {
 	}
 
 	public int addRumour(String url, String categoryName) {
+		//抓取新闻数
 		int total = 0;
+		NewsUtil newsUtil = new NewsUtil();
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
-		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
 		
 		//获取链接
@@ -146,8 +160,8 @@ public class SpiderServiceImpl implements SpiderService {
 			if(isFindTitle){
 				String title = titleMa.group(1).trim() + "  " + titleMa.group(2).trim();
 				
-				//如果待插入标题在数据库中已存在，则跳出循环
-				if(latestNewsTitle.equals(title)){
+				//如果待插入的新闻标题在数据库已存在，跳出循环
+				if(newsUtil.newsIsExist(cateId, title)){
 					break;
 				}
 				
@@ -181,9 +195,10 @@ public class SpiderServiceImpl implements SpiderService {
 	}
 	
 	public int addYCWB(String url, String categoryName) {
+		//抓取新闻数
 		int total = 0;
+		NewsUtil newsUtil = new NewsUtil();
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
-		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
 
 		//先获得新闻列表的div内容
@@ -236,8 +251,8 @@ public class SpiderServiceImpl implements SpiderService {
 				if(isFindTitle){
 					String title = titleMa.group(1).trim();
 					
-					//如果待插入的标题和数据库的已存在标题一致，则跳出循环
-					if(latestNewsTitle.equals(title)){
+					//如果待插入的新闻标题在数据库已存在，跳出循环
+					if(newsUtil.newsIsExist(cateId, title)){
 						break;
 					}
 					
@@ -270,9 +285,10 @@ public class SpiderServiceImpl implements SpiderService {
 	}
 
 	public int addNation(String url, String categoryName) {
+		//抓取新闻数
 		int total = 0;
+		NewsUtil newsUtil = new NewsUtil();
 		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
-		String latestNewsTitle = spiderDao.getLatestNewsTitleByCateId(cateId);
 		String content = Spider.sendGet(url, "UTF-8");	
 	
 		//获得国际新闻的url
@@ -319,9 +335,11 @@ public class SpiderServiceImpl implements SpiderService {
 			
 				if(isFindTitle){
 					String title = titleMa.group(1).trim();
-					if(latestNewsTitle.equals(title)){
+					//如果待插入的新闻标题在数据库已存在，跳出循环
+					if(newsUtil.newsIsExist(cateId, title)){
 						break;
 					}
+					
 					news.setNtitle(title);
 					news.setCategoryId(cateId);
 					news.setNauthor(authorMa.group(1).trim());
@@ -347,8 +365,70 @@ public class SpiderServiceImpl implements SpiderService {
 	
 	
 	public int addHistory(String url, String categoryName) {
-		// TODO Auto-generated method stub
-		return 0;
+		//抓取新闻数
+		int total = 0;
+		NewsUtil newsUtil = new NewsUtil();
+		ObjectId cateId = cateDao.getCategoryIdByName(categoryName);
+		String content = Spider.sendGet(url, "GBK");	
+		
+		//获取链接
+		String urlRegex = "·<a target.+?href=\"(.+?)\">";
+		Pattern urlPa = Pattern.compile(urlRegex);
+		Matcher urlMa = urlPa.matcher(content);
+		boolean isFind = urlMa.find();
+
+		while (isFind) {
+			News news = new News();
+			String _Url = urlMa.group(1);
+			
+			//通过获取到的链接访问网页，再获取更多的信息
+			String _content = Spider.sendGet(_Url,"GBK");
+
+			//匹配标题
+			Pattern titlePa = Pattern.compile("<div class=\"hd\"><h1>(.+?)</h1>");
+			Matcher titleMa = titlePa.matcher(_content);
+			boolean isFindTitle = titleMa.find();
+			
+			//发表时间
+			Pattern timePa = Pattern.compile("<span class=\"article-time\">(.+?)</span>");
+			Matcher timeMa = timePa.matcher(_content);		
+			boolean isFindTime = timeMa.find();
+			
+			//匹配内容
+			Pattern contentPa = Pattern.compile("bossZone=\"content\">(.+?)</P></div>");
+			Matcher contentMa = contentPa.matcher(_content);			
+			boolean isFindContent = contentMa.find();
+			
+			
+			if(isFindTitle){
+				String title = titleMa.group(1).trim();
+				
+				//如果待插入的新闻标题在数据库已存在，跳出循环
+				if(newsUtil.newsIsExist(cateId, title)){
+					break;
+				}
+				
+				news.setCategoryId(cateId);
+				news.setNauthor("腾讯网");
+				news.setNeditor("腾讯网");
+				news.setNtitle(title);
+
+				String time = timeMa.group(1).trim();
+				news.setNtime(TimeUtil.getFormatTime(time));
+				//正文
+				String content2 =  contentMa.group(1).trim();
+				news.setNcontent(content2);		
+				
+				//将新闻保存到数据库
+				newsDao.addNews(news);
+				
+				total++;
+			}			
+			
+			isFind = urlMa.find();
+		}
+
+		return total;
 	}
 	
 	/*public void addZhihu(String url, String categoryName) {

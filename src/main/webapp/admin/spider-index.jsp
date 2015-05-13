@@ -27,7 +27,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="content-body">
 				<form id="searchForm" name="searchForm" class="form-inline" role="form" method="post" action="">
 					<input type="hidden" name="cname" value="${cname}" />
-					<button class="btn btn-primary" type="button" onclick="spiderNews('all');">一键全部抓取</button>
+					<button class="btn btn-primary" type="button" onclick="formSubmit('all');">一键全部抓取</button>
 					<h1>本次一共抓取${total }条新闻</h1>
 					<br/><br/>
 					<button type="button" class="btn btn-info" onclick="formSubmit('ycwb');">抓取羊城晚报</button>		
@@ -77,6 +77,8 @@
 					</table>
 				</div>
 				
+				<div id="loadingIMG" style="display: none;z-index: 9999"><img src="../img/loading.gif" height='300'/></div>
+				
 			</div>
 		</div>
 	</div>
@@ -85,7 +87,7 @@
 		aria-labelledby="myModalLabel" aria-hidden="true"></div>
 	<script>
 	
-	function spiderNews(type) {
+/* 	function spiderNews(type) {
   		$.ajax({
 	        url:"${appName}/spider/news-" + type +".do",  
 	        type:"POST",
@@ -98,14 +100,21 @@
 	        	
         		$(".reload-button").attr("onclick","javascript:window.location.reload();");
 	        },
+            beforeSend:function(){
+                $('#loadingIMG').show();
+            },
+            complete:function(){
+                $('#loadingIMG').hide();
+            },
 	        error:function(e){
 	        }
 		});
-	}
+	} */
 	
 	function formSubmit(type){
 		var form=$("#searchForm");
 		form.attr("action", "${appName}/spider/news-" + type + ".do");
+		$('#loadingIMG').show();
 		$(form).submit();
 	}
 	</script>

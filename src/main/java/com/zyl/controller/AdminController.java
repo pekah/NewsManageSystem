@@ -1,7 +1,9 @@
 package com.zyl.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -246,6 +248,18 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("uname", uname);
 		mv.setViewName("admin/users-modify-show.jsp");
+		return mv;
+	}	
+
+	@RequestMapping("news-modify-show")
+	public ModelAndView modifyNewsShow(String nid)
+	{
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("nid", nid);
+		Map<String, Object> map = userSerivce.getNewsByNID(new ObjectId(nid));
+		ArrayList<String> news = (ArrayList<String>) map.get("news");
+		mv.addObject("news", news);
+		mv.setViewName("admin/news-modify-show.jsp");
 		return mv;
 	}	
 	

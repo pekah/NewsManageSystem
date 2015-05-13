@@ -116,8 +116,6 @@ public class SpiderController {
 		int total = 0;
 		
 		for(int i = 1; i <= FATCHPAGE; i++){
-			System.out.println("第" + i + "页");
-			
 			if(i == 1){
 				YCWB = YCWB + ".htm";
 			}else{
@@ -194,21 +192,14 @@ public class SpiderController {
 		ModelAndView mv = new ModelAndView();
 		int total = 0;
 		
-		spiderSerive.addYoukuVideo(TAIJIQUAN,"太极拳");
-		spiderSerive.addYoukuVideo(SQUAREDANCE,"广场舞");
-		spiderSerive.addRumour(RUMOUR,"流言百科");
-		spiderSerive.addYCWB(YCWB,"羊城晚报");
-		spiderSerive.addNation(NATION, "国际热点");
-		spiderSerive.addHistory(HISTORY, "历史新闻");
+		total += spiderSerive.addYoukuVideo(TAIJIQUAN,"太极拳");
+		total += spiderSerive.addYoukuVideo(SQUAREDANCE,"广场舞");
+		total += spiderSerive.addRumour(RUMOUR,"流言百科");
+		total += spiderSerive.addYCWB(YCWB,"羊城晚报");
+		total += spiderSerive.addNation(NATION, "国际热点");
+		total += spiderSerive.addHistory(HISTORY, "历史新闻");
 		
-		List<News> newsList = null;
-		if(total > 0){
-			newsList = userSerivce.getLatestNewsByCateName("历史新闻", total);
-		}
-		
-		mv.addObject("cname","历史新闻");
 		mv.addObject("total",total);
-		mv.addObject("newsList", newsList);
 		
 		mv.setViewName("admin/spider-index.jsp");
 		

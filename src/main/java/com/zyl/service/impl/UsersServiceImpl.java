@@ -122,7 +122,7 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	
-	public Map getNewsByNID(ObjectId nid) {
+	public Map<String, Object> getNewsByNID(ObjectId nid) {
 		return newsDao.getNewsByNID(nid);
 	}
 	

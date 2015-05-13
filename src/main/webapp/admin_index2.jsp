@@ -130,12 +130,9 @@
 		});
 	}
 
-	function toModifyNew(id) {
-		$('#myModal')
-				.load(
-						"${appName}/admin/new-modify-show",
+	function toModifyNew(nid) {
+		$('#myModal').load("${appName}/admin/news-modify-show.do",{"nid":nid},
 						function() {
-							$("input[name='accountId']").val(id);
 							$('#myModal').modal('show');
 						});
 	}

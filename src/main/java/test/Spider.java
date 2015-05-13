@@ -75,9 +75,6 @@ public class Spider {
 	static ArrayList<News> GetHistoryNews(String content) {
 		ArrayList<News> newsList = new ArrayList<News>();
 
-		// 用来匹配url，也就是问题的链接
-		// Pattern urlPattern =
-		// Pattern.compile("<h2>.+?question_link.+?href=\"(.+?)\".+?</h2>");
 		Pattern urlPattern = Pattern
 				.compile("·<a target.+?href=\"(.+?)\">");
 		Matcher urlMatcher = urlPattern.matcher(content);
@@ -118,8 +115,6 @@ public class Spider {
 				String ncontent = matcher.group(1);
 				news.setNcontent(ncontent);
 			}	
-			
-			
 			
 			newsList.add(news);
 			

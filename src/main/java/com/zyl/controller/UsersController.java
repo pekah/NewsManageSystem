@@ -143,7 +143,7 @@ public class UsersController {
 	@RequestMapping("addReview")
 	public ModelAndView addReview(HttpServletRequest req,HttpSession session,String nid,String content) throws Exception
 	{
-		String reviewContent = new String(content.getBytes("ISO-8859-1"),"gbk");
+		String reviewContent = new String(content.getBytes("ISO-8859-1"),"UTF-8");
 		String uname = (String) session.getAttribute("name");
 		usersService.addReview(nid, uname, reviewContent);
 		

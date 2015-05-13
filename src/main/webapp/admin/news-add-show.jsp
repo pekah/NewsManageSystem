@@ -51,7 +51,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label">新闻内容</label>
 					<div class="col-sm-3">
-						<input type="text" placeholder="必填" class="form-control"
+						<input type="text" style="width: 410px;height: 400px;" placeholder="必填" class="form-control"
 							name="content">
 					</div>
 				</div>

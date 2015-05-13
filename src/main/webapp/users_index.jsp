@@ -15,80 +15,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		#navigation{ margin-bottom:30px;}
-		#allNewsList{width:1200px; position: absolute;top: 70px; left: 70px;}
-		#cateNameh3{text-decoration:underline;}
+		#allNewsList{width:1100px; float:left;}
+		.allNewsList li a{ font-size:20px; line-height:30px;}
 		.allNewsList li span{
 		    color: #666666;
 		    float: right;
-		    font-size: 12px;		
+		    font-size: 20px;	
+		    line-height:30px;	
 		}
+		#cateNameh3{text-decoration:underline;}
+
 		.row .col-md-6{ margin-bottom:20px; border-bottom:1px solid #CCCCCC;}
 		.row .col-md-6 ul li a{font-size:18px; color:black;font-weight:normal;}
+		
 		.col4 {float:left;}
 		.col8 {float:right;}
+		.container_2 {width:1100px;margin:0 auto;}
 		.col8 a{cursor:pointer;}
 		.col-md-6 ul li:first-child{list-style-type:none;}
 		.col-md-6 ul li:first-child a{font-size:20px; color:black; font-weight: bold;  }
 		
 	</style>
 	<script>
-		$(document).ready(function()
-		{
-/* 				$.ajax({
-				    url : "getCategorys.do",
-				    type : "POST",
-				    contentType : "application/json",
-				    dataType : "json",
-				    //data:JSON.stringify(dataValue),
-				    success : function(data) {
-				        var datas;
-				   		for(var i in data)
-				   		{
-				   			datas = data[i];
-				   		}
-				    	for(var i in datas)
-				    	{ 
-				    		$("#navbarul").append("<li><a href='javascript:void(0)' onclick=\"specifyNewsList(\'"+ datas[i] +"\')\">" + datas[i] +"</a></li>");
-				    	}
-					},
-				    error : function(data) {
-				       
-				    }
-				});		 */	
-				
-/* 				//点击搜索按钮	
-				$("#searchBtn").click(function(){
-					var keyword = $("#keyword").val();
-					//清空ul下的所有li
-					$("#catesul").empty();
-					$("#cateNameh3").text("搜索结果");
-					$.ajax({
-						    url : "searchNews.do",
-						    type : "POST",
-						    contentType : "application/json",
-						    dataType : "json",
-						    data:JSON.stringify(keyword),
-						    success : function(data) {
-								var map = data.data;
-								var titles = map.title;
-								var times = map.time;
-								var nid = map.nid;
-								for(var i in titles)
-								{
-									$("#catesul").append("<li><a target=\"_blank\" href='viewNews.do?nid="+  nid[i] +"'>" + titles[i] + "</a><span>" + times[i] + "</span>");
-								}
-								
-							},
-						    error : function(data) {
-						       
-						    }
-						});					
-				}); */
-		});
-		
 
-		
-		
 		//查看指定版块的新闻列表,包括搜索功能
 		function specifyNewsList(cateName)
 		{
@@ -173,12 +122,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 </nav>
 	 <!--导航条结束-->
 	 <!--标题栏开始-->
-	 <div id="allNewsList" class="allNewsList">
+	 <div class="container">
+	 	<div id="allNewsList" class="allNewsList">
 	 		<h3 id="cateNameh3">${currentCName }</h3>	
 	 		<c:forEach var="news" items="${newsPage.pageList }">
 	 			<li><a target='_blank' href='viewNews.do?nid=${news.nid }'>${news.ntitle}</a><span>${news.ntime }</span>
 	 		</c:forEach>
 			<ul id="catesul"></ul>
+	 </div>
 	 </div>
 	<!--标题栏结束-->
 	
@@ -237,6 +188,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!-- 新闻表格结束 -->
 	</div>	
  	<!-- 分页div -->
+<<<<<<< HEAD
  	<div class="container">
  		<c:if test="${flag != 'index' }">
 	 		<div class="col4">
@@ -244,6 +196,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					${newsPage.totalRow} 记录</div>
 			</div>		
  		</c:if>
+=======
+ 	<div class="container_2">
+ 		<c:if test="${flag != 'index' }">
+		<div class="col4">
+			<div class="dataTables_info" id="example2_info">总共
+				${newsPage.totalRow} 记录</div>
+		</div>
+		</c:if>
+>>>>>>> e11365c2f16ee1ee015793a0d4eb65602a4c4fe6
 		<div class="col8">
 			<div class="dataTables_paginate paging_bootstrap">
 				<ul class="pagination">
