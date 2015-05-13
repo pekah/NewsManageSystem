@@ -157,5 +157,20 @@ public class UsersController {
 		return mv;
 	}
 	
+	//订阅栏目
+	@RequestMapping("addSubscribe")
+	public ModelAndView addSubscribe(HttpServletRequest req,HttpSession session,String nid,String categoryName) throws Exception
+	{
+		String cateName = new String(categoryName.getBytes("ISO-8859-1"),"gbk");
+		String uname = (String) session.getAttribute("name");
+		usersService.addSubscribe(uname, cateName);
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("viewNews.jsp");
+		return mv;
+	}
+	
+	
+	
 
 }

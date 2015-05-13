@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 
+import com.zyl.bean.Category;
 import com.zyl.bean.News;
 import com.zyl.bean.Users;
 import com.zyl.controller.Page;
@@ -26,4 +27,10 @@ public interface UsersService {
 	public void addReview(String nid,String uname,String content);
 	//搜索新闻
 	public Page<News> searchNews(String keyword, Integer pageNumber, Integer pageSize);
+	//订阅栏目
+	public void addSubscribe(String username, String categoryName);
+	//取消订阅
+	public void cancelSubscribe(String username, String categoryName);
+	//查看订阅
+	public List<Category> viewSubscribe(String username); 
 }

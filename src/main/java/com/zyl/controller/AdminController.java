@@ -83,15 +83,29 @@ public class AdminController {
 	}
 	
 	@RequestMapping("news-listAllCategory")
-	public ModelAndView listAllCategory(){
+	public ModelAndView listAllCategory(HttpSession session){
 		ModelAndView mv = new ModelAndView();
 		
-		List<Category> catrgories = adminService.getCategorys();
+		String uname = (String) session.getAttribute("name"); 
+		
+		List<Category> catrgories = userSerivce.viewSubscribe(uname);
+		
+		//如果当前用户未订阅新闻，则显示所有的新闻
+		if(catrgories == null){
+			catrgories = adminService.getCategorys();
+		}
 		
 		mv.addObject("catrgories",catrgories);
 		mv.setViewName("admin/category-list.jsp");
 		
 		return mv;
+		
+//		List<Category> catrgories = adminService.getCategorys();
+//		
+//		mv.addObject("catrgories",catrgories);
+//		mv.setViewName("admin/category-list.jsp");
+//		
+//		return mv;
 	}	
 	
 	

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.zyl.bean.Category;
 import com.zyl.bean.News;
 import com.zyl.bean.Users;
 import com.zyl.controller.Page;
@@ -130,6 +131,18 @@ public class UsersServiceImpl implements UsersService {
 		reviewDao.addReview(nid, uid, content, GetDate.getDate());
 	}
 	
-
+	public void addSubscribe(String username, String categoryName) {
+		usersDao.addSubscribe(username, categoryName);
+	}
+	
+	public void cancelSubscribe(String username, String categoryName) {
+		usersDao.cancelSubscribe(username, categoryName);
+		
+	}
+	
+	public List<Category> viewSubscribe(String username) {
+		List<Category> categories = usersDao.viewSubscribe(username);
+		return categories;
+	}
 	
 }

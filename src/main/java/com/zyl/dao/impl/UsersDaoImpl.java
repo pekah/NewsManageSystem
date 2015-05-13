@@ -19,6 +19,7 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.zyl.bean.Category;
 import com.zyl.bean.News;
 import com.zyl.bean.Users;
 import com.zyl.dao.UsersDao;
@@ -34,6 +35,11 @@ public class UsersDaoImpl implements UsersDao {
 	private void obtainColl(){
 		DB db = MongoManager.getDB();
 		coll = db.getCollection("users");		
+	}
+	
+	private void obtainCollByName(String collName){
+		DB db = MongoManager.getDB();
+		coll = db.getCollection(collName);		
 	}
 	
 	public Map<String, Object> listAllUsers(String keyword, int skip, int limit) {
@@ -116,4 +122,55 @@ public class UsersDaoImpl implements UsersDao {
 		
 //		return template.queryForInt("SELECT UID FROM Users WHERE UName = ?",username);
 	}	
+	
+	public void addSubscribe(String username, String categoryName) {
+		obtainCollByName("usersCategory");
+		
+		try {
+			BasicDBObject userCategory = new BasicDBObject("UName",username).append("CName", categoryName);
+			coll.save(userCategory);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void cancelSubscribe(String username, String categoryName) {
+		obtainCollByName("usersCategory");
+		
+		try {
+			BasicDBObject userCategory = new BasicDBObject("UName",username).append("CName", categoryName);
+			coll.remove(userCategory);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public List<Category> viewSubscribe(String username) {
+		obtainCollByName("usersCategory");
+		
+		List<Category> categories = new ArrayList<Category>();
+		
+		BasicDBObject user = new BasicDBObject("UName",username);
+		DBCursor cursor = coll.find(user);	
+		
+		try {
+			while(cursor.hasNext()){
+				Category cate = new Category();
+				DBObject obj = cursor.next();
+				cate.setCname(obj.get("CName").toString());
+				categories.add(cate);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cursor.close();
+		}
+		
+		return categories;
+	}
 }
