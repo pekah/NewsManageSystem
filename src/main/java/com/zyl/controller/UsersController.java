@@ -43,9 +43,11 @@ public class UsersController {
 	}	
 	
 	@RequestMapping("specifyNewsList")
-	public ModelAndView specifyNewsList(String cname, Integer pageNumber)
+	public ModelAndView specifyNewsList(HttpSession session, String cname, Integer pageNumber)
 	{
 		ModelAndView mv = new ModelAndView();
+		
+		String uname = (String) session.getAttribute("name"); 
 		
 		Page<News> newsPage = null;
 		
@@ -75,8 +77,14 @@ public class UsersController {
 		
 		mv.addObject("currentCName", cname);
 		
-		//获取所有栏目
-		List<Category> category = adminService.getCategorys();
+		//获取已订阅所有栏目
+		List<Category> category = usersService.viewSubscribe(uname);
+		
+		//如果当前用户未订阅新闻，则显示所有的新闻
+		if(category == null){
+			category = adminService.getCategorys();
+		}
+		
 		mv.addObject("category",category);
 		
 		mv.addObject("newsPage",newsPage);
@@ -88,8 +96,10 @@ public class UsersController {
 	}
 	
 	@RequestMapping("searchNews")
-	public ModelAndView searchNews(String keyword, Integer pageNumber)
+	public ModelAndView searchNews(HttpSession session, String keyword, Integer pageNumber)
 	{
+		String uname = (String) session.getAttribute("name"); 
+		
 		if (keyword == null || keyword.length() <= 0) {
 		    keyword = "";
 		}else{
@@ -106,9 +116,14 @@ public class UsersController {
 
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("currentCName", "搜索结果");
+
+		//获取已订阅所有栏目
+		List<Category> category = usersService.viewSubscribe(uname);
 		
-		//获取所有栏目
-		List<Category> category = adminService.getCategorys();
+		//如果当前用户未订阅新闻，则显示所有的新闻
+		if(category == null){
+			category = adminService.getCategorys();
+		}
 		mv.addObject("category",category);
 		
 		Page<News> newsPage = usersService.searchNews(keyword, pageNumber, Constants.pageSize);
@@ -123,12 +138,19 @@ public class UsersController {
 	}
 
 	@RequestMapping("viewNews")
-	public ModelAndView viewNews(HttpServletRequest req,String nid)
+	public ModelAndView viewNews(HttpSession session, HttpServletRequest req,String nid)
 	{
+		String uname = (String) session.getAttribute("name"); 
+		
 		ModelAndView mv = new ModelAndView();
 		
-		//获取所有栏目
-		List<Category> category = adminService.getCategorys();
+		//获取已订阅所有栏目
+		List<Category> category = usersService.viewSubscribe(uname);
+		
+		//如果当前用户未订阅新闻，则显示所有的新闻
+		if(category == null){
+			category = adminService.getCategorys();
+		}
 		mv.addObject("category",category);
 		
 		mv.setViewName("viewNews.jsp");

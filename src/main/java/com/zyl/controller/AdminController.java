@@ -110,6 +110,17 @@ public class AdminController {
 //		return mv;
 	}	
 	
+	@RequestMapping("news-listAllCategoryAdmin")
+	public ModelAndView listAllCategoryAdmin(){
+		ModelAndView mv = new ModelAndView();
+		
+		List<Category> catrgories = adminService.getCategorys();
+		
+		mv.addObject("catrgories",catrgories);
+		mv.setViewName("admin/category-list.jsp");
+		
+		return mv;
+	}	
 	
 	
 	@RequestMapping("getCategorys")
