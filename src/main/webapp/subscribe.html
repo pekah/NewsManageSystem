@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>订阅管理</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    #col_4 ,#col_5 ,#col_6{margin-top:300px;}
+    img{width:300px; height:225px;}
+    .col-md-4{margin-top: 60px; position: relative; cursor: pointer;}
+    .col-md-4 img{position: absolute;}
+    .col-top {width:100px; margin-left: 100px; height:30px; margin-top: 100px; opacity: .7; background: black;position: absolute;}
+    .col-buttom {width:300px; height:30px; background: black; opacity: .5; position: absolute; margin-top: 195px;}
+    .col-md-4 p{text-align: center;line-height: 30px; color: white; font-size: 18px}
+  </style>
+
+  <script type="text/javascript">
+    window.onload = function(){
+      var col_1 = document.getElementById("col_1");
+      var col_buttom_1 = document.getElementById("col-buttom_1");
+      var index_1 = true;
+      var col_2 = document.getElementById("col_2");
+      var col_buttom_2 = document.getElementById("col-buttom_2");
+      var index_2 = true;
+      var col_3 = document.getElementById("col_3");
+      var col_buttom_3 = document.getElementById("col-buttom_3");
+      var index_3 = true;
+      var col_4 = document.getElementById("col_4");
+      var col_buttom_4 = document.getElementById("col-buttom_4");
+      var index_4 = true;
+      var col_5 = document.getElementById("col_5");
+      var col_buttom_5 = document.getElementById("col-buttom_5");
+      var index_5 = true;
+      var col_6 = document.getElementById("col_6");
+      var col_buttom_6 = document.getElementById("col-buttom_6");
+      var index_6 = true;
+      function change(col,col_buttom,index){
+        col.onmouseover = function(){
+          //col_buttom.style.display = "none";
+          //this.src="img/history_2.jpg";
+          if(index){
+            col_buttom.getElementsByTagName("p")[0].innerHTML = "取消订阅";
+            col.onclick = function(){
+                col_buttom.getElementsByTagName("p")[0].innerHTML = "您未订阅该栏目";
+                index = false;
+            }
+          }
+          if(!index){
+            col_buttom.getElementsByTagName("p")[0].innerHTML = "添加订阅";
+            col.onclick = function(){
+                col_buttom.getElementsByTagName("p")[0].innerHTML = "您已订阅该栏目";
+                index = true;
+            }
+          }
+        }
+        col.onmouseout = function(){
+          //this.src="img/history.jpg";
+          //col_buttom.style.display = "block";
+          if(index){
+            col_buttom.getElementsByTagName("p")[0].innerHTML = "您已订阅该栏目";
+          }
+          if(!index){
+            col_buttom.getElementsByTagName("p")[0].innerHTML = "您未订阅该栏目";
+          }
+        }
+      }
+      change(col_1,col_buttom_1,index_1);
+      change(col_2,col_buttom_2,index_2);
+      change(col_3,col_buttom_3,index_3);
+      change(col_4,col_buttom_4,index_4);
+      change(col_5,col_buttom_5,index_5);
+      change(col_6,col_buttom_6,index_6);
+    }
+  </script>
+
+</head>
+<body>
+	<!--导航条开始-->
+  <nav class="navbar navbar-default" role="navigation" id="navigation">
+    <div class="container">
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="javascript:void(0)">欢迎你：pekah</a>
+      </div><!--navbar-header-->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav" id="navbarul">     
+        <li><a href="#">首页</a></li>
+        <li><a href="#">历史新闻</a></li>
+        <li><a href="#">流言百科</a></li>
+        <li><a href="#">羊城晚报</a></li>
+        <li><a href="#">广场舞</a></li>
+        <li><a href="#">太极拳</a></li>
+        <li><a href="#">国际热点</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search" id="searchForm" name="searchForm" action="">
+        <input type="hidden" name="pageNumber" value="${newsPage.pageNumber}" />
+        <input type="hidden" name="cname" value="${currentCName}" />
+        <input type="hidden" name="keyword" value="${keyword}" />
+        <div class="form-group">
+        <input type="text" class="form-control" id="keyword"/>
+        <!-- <button type="button" class="btn btn-default" onclick="window.open('searchNews.do?keyword=1')">搜索</button> -->
+        <button type="button" class="btn btn-default" onclick="search(1,'false')">搜索</button>
+        </div>
+      </form>
+      <ul class="nav navbar-nav" id="navbarul">   
+        <li><a href="#">订阅管理</a></li>
+      </ul>
+       </div><!-- collapse -->
+    </div>
+   </nav>
+   <!--导航条结束-->
+
+<div class="container">
+  <div class="col-md-4" id="col_1">
+    <img src="img/history.jpg">
+    <div class="col-top">
+      <p>历史新闻</p>
+    </div>
+    <div id="col-buttom_1" class="col-buttom">
+      <p>您已订阅该栏目</p>
+    </div>
+  </div>
+  <div class="col-md-4" id="col_2">
+    <img src="img/rumor.jpg">
+    <div class="col-top">
+      <p>流言百科</p>
+    </div>
+    <div id="col-buttom_2" class="col-buttom">
+      <p>您已订阅该栏目</p>
+    </div>
+  </div>
+  <div class="col-md-4" id="col_3">
+    <img src="img/news.jpg">
+    <!-- <div class="col-top">
+      <p>羊城晚报</p>
+    </div> -->
+    <div id="col-buttom_3" class="col-buttom">
+      <p>您已订阅该栏目</p>
+    </div>
+  </div>
+  <div class="col-md-4" id="col_4">
+    <img src="img/dance.jpg">
+    <div class="col-top">
+      <p>广场舞</p>
+    </div>
+    <div id="col-buttom_4" class="col-buttom">
+      <p>您已订阅该栏目</p>
+    </div>
+  </div>
+  <div class="col-md-4" id="col_5">
+    <img src="img/taiji.jpg">
+    <div class="col-top">
+      <p>太极拳</p>
+    </div>
+    <div id="col-buttom_5" class="col-buttom">
+      <p>您已订阅该栏目</p>
+    </div>
+  </div>
+  <div class="col-md-4" id="col_6">
+    <img src="img/nation.jpg">
+    <div class="col-top">
+      <p>国际热点</p>
+    </div>
+    <div id="col-buttom_6" class="col-buttom">
+      <p>您已订阅该栏目</p>
+    </div>
+  </div>
+</div>
+  <script src="js/jquery-2.1.3.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+</body>
+
+</html>
